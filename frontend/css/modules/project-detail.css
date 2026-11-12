@@ -1,0 +1,150 @@
+/*
+ * PhentiBuild (PhB) - Project Detail
+ * Header, summary tiles, tab strip and the Overview panel.
+ */
+
+.detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--phb-space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--phb-space-5);
+}
+
+.detail-heading h1 {
+    margin-bottom: var(--phb-space-1);
+}
+
+.detail-heading p {
+    margin: 0;
+}
+
+.detail-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   SUMMARY TILES
+   ============================================ */
+.detail-summary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+}
+
+.detail-tile {
+    padding: var(--phb-space-4) var(--phb-space-5);
+    border-left: 4px solid var(--phb-primary);
+}
+
+.detail-tile .tile-label {
+    display: block;
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--phb-text-secondary);
+    margin-bottom: var(--phb-space-2);
+}
+
+.detail-tile .tile-value {
+    display: block;
+    font-size: var(--phb-text-md);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+}
+
+/* Progress bars sit inside a tile without the list's minimum width */
+.detail-tile .progress {
+    min-width: 0;
+}
+
+/* ============================================
+   TABS + PANELS
+   ============================================ */
+.detail-tab-panels {
+    padding-top: var(--phb-space-5);
+}
+
+.detail-tab-panels [data-tab-panel][hidden] {
+    display: none;
+}
+
+.detail-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-5);
+    align-items: start;
+}
+
+/* ============================================
+   FACT LIST
+   ============================================ */
+.detail-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-1);
+    margin: 0;
+}
+
+.detail-list dt {
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--phb-text-secondary);
+}
+
+.detail-list dd {
+    margin: 0 0 var(--phb-space-3);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+}
+
+.detail-list dd:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (min-width: 640px) {
+    .detail-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Label/value pairs sit side by side once there's room */
+    .detail-list {
+        grid-template-columns: minmax(140px, 40%) 1fr;
+        gap: 0;
+        align-items: baseline;
+    }
+    .detail-list dt {
+        padding: var(--phb-space-2) 0;
+        border-bottom: 1px solid var(--phb-border-color);
+    }
+    .detail-list dd {
+        margin: 0;
+        padding: var(--phb-space-2) 0;
+        border-bottom: 1px solid var(--phb-border-color);
+    }
+    .detail-list dt:last-of-type,
+    .detail-list dd:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (min-width: 1024px) {
+    .detail-summary {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .detail-overview-grid {
+        grid-template-columns: 3fr 2fr;
+    }
+}

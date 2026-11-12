@@ -1,0 +1,320 @@
+/*
+ * PhentiBuild (PhB) - Dashboard
+ * Stat cards, the quick-action tile grid and the three-column
+ * recent-activity layout. Card/badge/progress styling comes from
+ * css/components/*.
+ */
+
+.dash-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+}
+
+.dash-stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-4);
+    min-width: 0;
+    padding: var(--phb-space-4) var(--phb-space-5);
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-left: 4px solid var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+}
+
+.dash-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--phb-radius-sm);
+}
+.dash-stat-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.dash-stat-primary { border-left-color: var(--phb-primary); }
+.dash-stat-primary .dash-stat-icon { background-color: var(--phb-primary-light); color: var(--phb-primary); }
+
+.dash-stat-info { border-left-color: var(--phb-info); }
+.dash-stat-info .dash-stat-icon { background-color: var(--phb-info-bg); color: var(--phb-info); }
+
+.dash-stat-slate { border-left-color: var(--phb-slate); }
+.dash-stat-slate .dash-stat-icon { background-color: var(--phb-gray-200); color: var(--phb-slate); }
+
+.dash-stat-success { border-left-color: var(--phb-success); }
+.dash-stat-success .dash-stat-icon { background-color: var(--phb-success-bg); color: var(--phb-success); }
+
+.dash-stat-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-1);
+    min-width: 0;
+}
+
+.dash-stat-label {
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--phb-text-muted);
+}
+
+.dash-stat-value {
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-2xl);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-text-primary);
+    line-height: 1;
+}
+
+.dash-section {
+    margin-bottom: var(--phb-space-5);
+}
+
+.dash-header-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--phb-space-2);
+    color: var(--phb-primary);
+    vertical-align: -2px;
+}
+
+/* ============================================
+   QUICK ACTIONS — app-tile style, distinct from the .mi-type-card
+   "chooser" rows used elsewhere (this grid is denser and icon-led).
+   ============================================ */
+.dash-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--phb-space-4);
+}
+
+.dash-action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--phb-space-3);
+    min-width: 0;
+    padding: var(--phb-space-5) var(--phb-space-3);
+    text-align: center;
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    transition: border-color var(--phb-transition-fast),
+                box-shadow var(--phb-transition-fast),
+                transform var(--phb-transition-fast);
+}
+
+.dash-action-card:hover {
+    border-color: var(--phb-primary);
+    box-shadow: var(--phb-shadow-md);
+    transform: translateY(-2px);
+}
+
+.dash-action-card:hover .dash-action-icon {
+    background-color: var(--phb-primary);
+    color: var(--phb-white);
+}
+
+.dash-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--phb-radius-full);
+    background-color: var(--phb-primary-light);
+    color: var(--phb-primary);
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+}
+.dash-action-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.dash-action-label {
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+}
+
+/* ============================================
+   RECENT-ACTIVITY COLUMNS — align-items: start is the key fix here: a
+   short list must never stretch to match its tallest sibling column.
+   ============================================ */
+.dash-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--phb-space-5);
+}
+
+.dash-see-all {
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-primary);
+    white-space: nowrap;
+}
+.dash-see-all:hover {
+    text-decoration: underline;
+}
+
+.dash-loading {
+    margin: 0;
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-muted);
+}
+
+.dash-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-6) var(--phb-space-3);
+    text-align: center;
+    color: var(--phb-text-muted);
+    font-size: var(--phb-text-sm);
+}
+.dash-empty svg {
+    width: 32px;
+    height: 32px;
+    color: var(--phb-gray-400);
+}
+.dash-empty a {
+    color: var(--phb-primary);
+    font-weight: var(--phb-fw-semibold);
+}
+
+.dash-project-list,
+.dash-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dash-project-item,
+.dash-list-item {
+    padding: var(--phb-space-4) 0;
+    border-bottom: 1px solid var(--phb-border-color);
+}
+.dash-project-item:last-child,
+.dash-list-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.dash-project-item:first-child,
+.dash-list-item:first-child {
+    padding-top: 0;
+}
+
+.dash-project-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-2);
+}
+
+.dash-project-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-2);
+}
+.dash-project-name-row .dash-project-name {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.dash-project-name-row .badge {
+    flex: 0 0 auto;
+}
+
+.dash-project-name {
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-project-ref {
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+.dash-project-progress {
+    min-width: 0;
+}
+.dash-project-progress .progress-value {
+    flex: 0 0 auto;
+}
+
+.dash-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--phb-space-3);
+}
+
+.dash-list-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: var(--phb-radius-full);
+    background-color: var(--phb-primary-light);
+    color: var(--phb-primary);
+}
+.dash-list-icon svg {
+    width: 16px;
+    height: 16px;
+}
+.dash-list-icon-deleted { background-color: var(--phb-danger-bg); color: var(--phb-danger); }
+.dash-list-icon-updated { background-color: var(--phb-info-bg); color: var(--phb-info); }
+
+.dash-list-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-2);
+    min-width: 0;
+}
+
+.dash-list-title {
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+    line-height: var(--phb-lh-normal);
+}
+
+.dash-list-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+@media (min-width: 640px) {
+    .dash-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .dash-quick-actions {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .dash-quick-actions {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .dash-columns {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

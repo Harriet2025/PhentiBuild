@@ -1,0 +1,144 @@
+/*
+ * PhentiBuild (PhB) - Design Tokens
+ * Single source of truth for color, type, spacing, radius, shadow and
+ * breakpoint values. Every component stylesheet should reference these
+ * variables instead of hardcoding raw values.
+ */
+
+:root {
+    /* ============================================
+       COLORS - Brand
+       ============================================ */
+    --phb-primary: #FF6600;          /* Industrial Orange */
+    --phb-primary-dark: #CC5200;     /* hover / active states */
+    --phb-primary-darker: #A34200;   /* pressed state */
+    --phb-primary-light: #FFEDE0;    /* tint background */
+    --phb-primary-border: #FFC299;   /* light border/accent */
+
+    --phb-charcoal: #2B2B2B;         /* dark surfaces, primary text */
+    --phb-charcoal-light: #3D3D3D;   /* dark surface hover */
+    --phb-charcoal-lighter: #4F4F4F;
+
+    --phb-slate: #5A6672;            /* secondary text */
+    --phb-slate-light: #8A94A0;      /* muted text / placeholders */
+
+    --phb-white: #FFFFFF;
+    --phb-light-gray: #F2F3F5;       /* page background */
+
+    /* Neutral scale (light gray family) */
+    --phb-gray-100: #F8F9FA;
+    --phb-gray-200: #EDEEF0;
+    --phb-gray-300: #D7D9DC;
+    --phb-gray-400: #B5B9BE;
+    --phb-gray-500: #8A9099;
+
+    /* ============================================
+       COLORS - Semantic / status
+       ============================================ */
+    --phb-success: #1E8E3E;
+    --phb-success-bg: #E6F4EA;
+    --phb-success-border: #B7E1C2;
+
+    --phb-warning: #B7791F;
+    --phb-warning-bg: #FDF3DF;
+    --phb-warning-border: #F0D08A;
+
+    --phb-danger: #C62828;
+    --phb-danger-bg: #FBEAEA;
+    --phb-danger-border: #EFB6B6;
+
+    --phb-info: #1565C0;
+    --phb-info-bg: #E8F1FC;
+    --phb-info-border: #A9CBEE;
+
+    /* ============================================
+       TEXT / SURFACE ROLES
+       ============================================ */
+    --phb-text-primary: var(--phb-charcoal);
+    --phb-text-secondary: var(--phb-slate);
+    --phb-text-muted: var(--phb-slate-light);
+    --phb-text-inverse: var(--phb-white);
+
+    --phb-bg-page: var(--phb-light-gray);
+    --phb-bg-surface: var(--phb-white);
+    --phb-bg-subtle: var(--phb-gray-100);
+
+    --phb-border-color: var(--phb-gray-300);
+    --phb-border-color-strong: var(--phb-gray-400);
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    --phb-font-base: 'Segoe UI', Roboto, Arial, sans-serif;
+    --phb-font-mono: 'Consolas', 'Courier New', monospace; /* measurements, quantities, codes */
+
+    --phb-text-xs: 0.75rem;    /* 12px */
+    --phb-text-sm: 0.875rem;   /* 14px */
+    --phb-text-base: 1rem;     /* 16px */
+    --phb-text-md: 1.125rem;   /* 18px */
+    --phb-text-lg: 1.25rem;    /* 20px */
+    --phb-text-xl: 1.5rem;     /* 24px */
+    --phb-text-2xl: 1.875rem;  /* 30px */
+    --phb-text-3xl: 2.25rem;   /* 36px */
+
+    --phb-fw-regular: 400;
+    --phb-fw-medium: 500;
+    --phb-fw-semibold: 600;
+    --phb-fw-bold: 700;
+
+    --phb-lh-tight: 1.2;
+    --phb-lh-normal: 1.5;
+    --phb-lh-relaxed: 1.7;
+
+    /* ============================================
+       SPACING SCALE (base unit: 8px)
+       ============================================ */
+    --phb-space-1: 0.25rem;  /* 4px  */
+    --phb-space-2: 0.5rem;   /* 8px  */
+    --phb-space-3: 0.75rem;  /* 12px */
+    --phb-space-4: 1rem;     /* 16px */
+    --phb-space-5: 1.5rem;   /* 24px */
+    --phb-space-6: 2rem;     /* 32px */
+    --phb-space-7: 3rem;     /* 48px */
+    --phb-space-8: 4rem;     /* 64px */
+
+    /* ============================================
+       RADIUS / SHADOW / BORDERS
+       Industrial aesthetic: modest radii, not overly rounded
+       ============================================ */
+    --phb-radius-sm: 4px;
+    --phb-radius-md: 6px;
+    --phb-radius-lg: 10px;
+    --phb-radius-full: 999px;
+
+    --phb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+    --phb-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+    --phb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+    --phb-focus-ring: 0 0 0 3px rgba(255, 102, 0, 0.35);
+
+    /* ============================================
+       Z-INDEX SCALE
+       ============================================ */
+    --phb-z-dropdown: 100;
+    --phb-z-sticky: 200;
+    --phb-z-overlay: 900;
+    --phb-z-modal: 1000;
+    --phb-z-toast: 1100;
+
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --phb-transition-fast: 120ms ease-in-out;
+    --phb-transition-base: 200ms ease-in-out;
+}
+
+/*
+ * RESPONSIVE BREAKPOINTS (reference only — CSS variables cannot be used
+ * inside @media queries, so every component uses these exact pixel values):
+ *
+ *   Mobile   : 0 - 767px    (default / mobile-first base styles)
+ *   Tablet   : >= 768px     @media (min-width: 768px)
+ *   Desktop  : >= 1024px    @media (min-width: 1024px)
+ *   Wide     : >= 1280px    @media (min-width: 1280px)
+ */

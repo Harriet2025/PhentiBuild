@@ -1,0 +1,259 @@
+/*
+ * PhentiBuild (PhB) - Navigation
+ * Topbar, sidebar, breadcrumbs and tabs. Structural/visual only —
+ * no routing or JS behavior wired up yet.
+ */
+
+/* ============================================
+   TOPBAR
+   ============================================ */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-4);
+    height: 64px;
+    padding: 0 var(--phb-space-5);
+    background-color: var(--phb-charcoal);
+    color: var(--phb-white);
+    position: sticky;
+    top: 0;
+    z-index: var(--phb-z-sticky);
+}
+
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-lg);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-white);
+}
+
+.topbar-brand .brand-mark {
+    color: var(--phb-primary);
+}
+
+.topbar-brand .brand-logo {
+    color: var(--phb-primary);
+    flex-shrink: 0;
+}
+
+.topbar-nav {
+    display: none;
+    align-items: center;
+    gap: var(--phb-space-5);
+}
+
+.topbar-nav a {
+    color: var(--phb-gray-300);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    padding: var(--phb-space-2) 0;
+    border-bottom: 2px solid transparent;
+}
+
+.topbar-nav a:hover {
+    color: var(--phb-white);
+    text-decoration: none;
+}
+
+.topbar-nav a.is-active {
+    color: var(--phb-white);
+    border-bottom-color: var(--phb-primary);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+}
+
+@media (min-width: 1024px) {
+    .topbar-nav {
+        display: flex;
+    }
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+    width: 260px;
+    height: 100%;
+    background-color: var(--phb-charcoal);
+    color: var(--phb-gray-300);
+    padding: var(--phb-space-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-1);
+}
+
+.sidebar-section-label {
+    padding: var(--phb-space-4) var(--phb-space-5) var(--phb-space-2);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--phb-slate-light);
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-3) var(--phb-space-5);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-gray-300);
+    border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+    background-color: var(--phb-charcoal-light);
+    color: var(--phb-white);
+    text-decoration: none;
+}
+
+.sidebar-link.is-active {
+    background-color: var(--phb-charcoal-light);
+    border-left-color: var(--phb-primary);
+    color: var(--phb-white);
+}
+
+.sidebar-link .icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Generic placeholder square, only shown when no real icon markup is present */
+.sidebar-link .icon:empty {
+    border-radius: var(--phb-radius-sm);
+    background-color: currentColor;
+    opacity: 0.25;
+}
+
+.sidebar-link .icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* App shell: sidebar + main content, stacked on mobile */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-shell .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: var(--phb-space-2);
+}
+.app-shell .sidebar .sidebar-section-label {
+    display: none;
+}
+.app-shell .sidebar .sidebar-link {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+}
+.app-shell .sidebar .sidebar-link.is-active {
+    border-bottom-color: var(--phb-primary);
+}
+
+.app-shell .app-main {
+    flex: 1;
+    padding: var(--phb-space-5);
+}
+
+@media (min-width: 1024px) {
+    .app-shell {
+        flex-direction: row;
+    }
+    .app-shell .sidebar {
+        width: 260px;
+        height: auto;
+        flex-direction: column;
+        overflow-x: visible;
+        padding: var(--phb-space-5) 0;
+    }
+    .app-shell .sidebar .sidebar-section-label {
+        display: block;
+    }
+    .app-shell .sidebar .sidebar-link {
+        border-left: 3px solid transparent;
+        border-bottom: none;
+    }
+    .app-shell .sidebar .sidebar-link.is-active {
+        border-bottom: none;
+        border-left-color: var(--phb-primary);
+    }
+    .app-shell .app-main {
+        padding: var(--phb-space-6);
+    }
+}
+
+/* ============================================
+   BREADCRUMBS
+   ============================================ */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-muted);
+    margin-bottom: var(--phb-space-5);
+}
+
+.breadcrumb a {
+    color: var(--phb-text-secondary);
+    font-weight: var(--phb-fw-medium);
+}
+
+.breadcrumb .separator {
+    color: var(--phb-gray-400);
+}
+
+.breadcrumb .is-current {
+    color: var(--phb-text-primary);
+    font-weight: var(--phb-fw-semibold);
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+.tabs {
+    display: flex;
+    gap: var(--phb-space-5);
+    border-bottom: 2px solid var(--phb-border-color);
+    overflow-x: auto;
+}
+
+.tab-link {
+    padding: var(--phb-space-3) var(--phb-space-1);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+}
+
+.tab-link:hover {
+    color: var(--phb-text-primary);
+    text-decoration: none;
+}
+
+.tab-link.is-active {
+    color: var(--phb-primary);
+    border-bottom-color: var(--phb-primary);
+}

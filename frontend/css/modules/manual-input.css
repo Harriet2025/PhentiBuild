@@ -1,0 +1,468 @@
+/*
+ * PhentiBuild (PhB) - Manual Input
+ * The measurement-type chooser and the entry forms behind it.
+ * Field styling itself comes from components/forms.css; this file adds
+ * the chooser grid, the number + unit control, and the form chrome.
+ */
+
+.mi-intro {
+    margin-bottom: var(--phb-space-5);
+}
+
+/* ============================================
+   CHOOSER GRID
+   ============================================ */
+.mi-chooser-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-4);
+}
+
+.mi-type-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--phb-space-4);
+    width: 100%;
+    padding: var(--phb-space-5);
+    text-align: left;
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-left: 4px solid var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+    cursor: pointer;
+    transition: border-color var(--phb-transition-fast),
+                box-shadow var(--phb-transition-fast),
+                transform var(--phb-transition-fast);
+}
+
+.mi-type-card:hover {
+    border-left-color: var(--phb-primary);
+    box-shadow: var(--phb-shadow-md);
+    transform: translateY(-2px);
+}
+
+.mi-type-card:focus-visible {
+    outline: none;
+    border-left-color: var(--phb-primary);
+    box-shadow: var(--phb-focus-ring);
+}
+
+.mi-type-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--phb-radius-sm);
+    background-color: var(--phb-primary-light);
+    color: var(--phb-primary);
+}
+
+.mi-type-icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.mi-type-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.mi-type-title {
+    display: block;
+    font-size: var(--phb-text-md);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+    margin-bottom: var(--phb-space-1);
+}
+
+.mi-type-desc {
+    display: block;
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+    line-height: var(--phb-lh-normal);
+}
+
+.mi-type-meta {
+    display: inline-block;
+    margin-top: var(--phb-space-3);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--phb-text-muted);
+}
+
+.mi-type-arrow {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: var(--phb-space-3);
+    color: var(--phb-gray-400);
+}
+
+.mi-type-card:hover .mi-type-arrow {
+    color: var(--phb-primary);
+}
+
+/* ============================================
+   FORM VIEW
+   ============================================ */
+.mi-form-view[hidden] {
+    display: none;
+}
+
+.mi-form {
+    max-width: 1100px;
+}
+
+/* "Set all length units to" shortcut, sitting above the field grid */
+.mi-unitbar {
+    padding: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+    background-color: var(--phb-bg-subtle);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-sm);
+}
+
+.mi-unitbar .form-label {
+    margin-bottom: var(--phb-space-2);
+}
+
+.mi-unitbar .form-control {
+    max-width: 260px;
+}
+
+.mi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 var(--phb-space-5);
+}
+
+/* The grid supplies the column gap; .form-group keeps the row rhythm. */
+.mi-grid .form-group {
+    margin-bottom: var(--phb-space-5);
+}
+
+.mi-note {
+    margin: 0;
+    padding-top: var(--phb-space-4);
+    border-top: 1px solid var(--phb-border-color);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+}
+
+/* ============================================
+   NUMBER + UNIT CONTROL
+   ============================================ */
+.measure-input {
+    display: flex;
+    align-items: stretch;
+}
+
+.measure-input .form-control {
+    /* Without this the input refuses to shrink past its intrinsic width and
+       pushes the unit selector out of the field on narrow screens. */
+    min-width: 0;
+    flex: 1 1 auto;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.unit-select,
+.unit-static {
+    flex: 0 0 104px;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--phb-space-3);
+    background-color: var(--phb-bg-subtle);
+    border: 1px solid var(--phb-border-color-strong);
+    border-left: none;
+    border-top-right-radius: var(--phb-radius-sm);
+    border-bottom-right-radius: var(--phb-radius-sm);
+    font-family: var(--phb-font-base);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-text-secondary);
+}
+
+.unit-static {
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.unit-select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235A6672' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--phb-space-3) center;
+    padding-right: var(--phb-space-6);
+}
+
+.unit-select:focus {
+    outline: none;
+    border-color: var(--phb-primary);
+    box-shadow: var(--phb-focus-ring);
+    position: relative;
+    z-index: 1;
+}
+
+/* Pitch units are wider than "inches", so give that selector more room. */
+.unit-select[data-unit-kind="pitch"] {
+    flex-basis: 124px;
+}
+
+/* ============================================
+   FORM ACTIONS
+   ============================================ */
+.mi-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--phb-space-3);
+}
+
+.mi-actions-note {
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-muted);
+}
+
+.mi-actions-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+    margin-left: auto;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+    .mi-actions-buttons {
+        width: 100%;
+    }
+    .mi-actions-buttons .btn {
+        flex: 1;
+    }
+}
+
+@media (min-width: 640px) {
+    .mi-chooser-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ============================================
+   CALCULATION RESULTS
+   ============================================ */
+.mi-calc-results {
+    margin-top: var(--phb-space-6);
+}
+
+.mi-result-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+}
+
+.mi-result-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--phb-space-4);
+    padding: var(--phb-space-3) 0;
+    border-bottom: 1px solid var(--phb-border-color);
+}
+
+.mi-result-row:last-child {
+    border-bottom: none;
+}
+
+.mi-result-label {
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    flex: 0 0 auto;
+}
+
+.mi-result-value {
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-lg);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-text-primary);
+    text-align: right;
+    flex: 1 1 auto;
+}
+
+.mi-result-unit {
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+    flex: 0 0 auto;
+}
+
+.mi-result-highlight .mi-result-value {
+    color: var(--phb-primary);
+    font-size: var(--phb-text-xl);
+}
+
+/* ============================================
+   ASSUMPTIONS DISCLOSURE
+   ============================================ */
+.mi-assumptions {
+    padding-top: var(--phb-space-4);
+    border-top: 1px solid var(--phb-border-color);
+}
+
+.mi-assumptions-toggle {
+    display: block;
+    cursor: pointer;
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-primary);
+    user-select: none;
+    padding: var(--phb-space-2);
+}
+
+.mi-assumptions-toggle:hover {
+    text-decoration: underline;
+}
+
+.mi-assumptions-body {
+    margin-top: var(--phb-space-3);
+    padding: var(--phb-space-3) var(--phb-space-4);
+    background-color: var(--phb-bg-subtle);
+    border-radius: var(--phb-radius-sm);
+    font-size: var(--phb-text-sm);
+}
+
+.mi-assumptions-body ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mi-assumptions-body li {
+    margin-bottom: var(--phb-space-3);
+    line-height: var(--phb-lh-normal);
+}
+
+.mi-assumptions-body li:last-child {
+    margin-bottom: 0;
+}
+
+.mi-assumptions-body strong {
+    color: var(--phb-text-primary);
+}
+
+/* ============================================
+   REBAR SCHEDULE TABLE
+   ============================================ */
+.mi-schedule-wrapper {
+    margin-top: var(--phb-space-5);
+    overflow-x: auto;
+}
+
+.mi-schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--phb-text-sm);
+}
+
+.mi-schedule-table thead {
+    background-color: var(--phb-bg-subtle);
+    border-bottom: 2px solid var(--phb-border-color);
+}
+
+.mi-schedule-table th {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    text-align: left;
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+    white-space: nowrap;
+}
+
+.mi-schedule-table td {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    border-bottom: 1px solid var(--phb-border-color);
+    color: var(--phb-text-primary);
+}
+
+.mi-schedule-table tbody tr:hover {
+    background-color: var(--phb-bg-subtle);
+}
+
+.mi-schedule-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Right-align numeric columns for readability */
+.mi-schedule-table td:nth-child(n+3) {
+    text-align: right;
+    font-family: var(--phb-font-mono);
+}
+
+.mi-schedule-table th:nth-child(n+3) {
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (min-width: 640px) {
+    .mi-result-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--phb-space-5);
+    }
+
+    .mi-result-row {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: var(--phb-space-4);
+        border-bottom: none;
+        border: 1px solid var(--phb-border-color);
+        border-radius: var(--phb-radius-sm);
+        background-color: var(--phb-bg-subtle);
+    }
+
+    .mi-result-label {
+        font-size: var(--phb-text-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: var(--phb-space-2);
+    }
+
+    .mi-result-value {
+        text-align: left;
+    }
+
+    .mi-result-unit {
+        margin-top: var(--phb-space-1);
+        display: block;
+    }
+}
+
+@media (min-width: 1280px) {
+    .mi-chooser-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mi-result-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}

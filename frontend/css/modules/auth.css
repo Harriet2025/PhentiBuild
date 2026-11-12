@@ -1,0 +1,480 @@
+/*
+ * PhentiBuild (PhB) - Login / Register
+ *
+ * Structure mirrors a floating, rounded "auth card" centered on a plain
+ * light page, with a shared brand header ABOVE the card (logo + wordmark
+ * + tagline) — not baked into either card's own content.
+ *
+ *   .auth-page          full-viewport centering wrapper (light background)
+ *   .auth-brand-header  shared logo/wordmark/tagline, above the card
+ *   .auth-card          the rounded, shadowed card itself
+ *     --login    : split into .auth-hero-pane (photo/branding) +
+ *                  .auth-form-pane (dark) containing a nested
+ *                  .auth-form-float glass card with the actual form
+ *     --register : a single plain white pane, no hero — matches the
+ *                  reference design, which shows register as a plain
+ *                  card with no photo panel
+ *
+ * Responsive strategy (mobile-first):
+ *   < 768px  : hero pane (login only) collapses to a compact top strip
+ *   768-1023 : hero shown with a condensed, icon-only feature row
+ *   >= 1024  : full split card, as designed
+ */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--phb-space-6) var(--phb-space-4);
+    background: var(--phb-bg-page);
+}
+
+.auth-page-inner {
+    width: 100%;
+    max-width: 1180px;
+}
+
+/* ============================================
+   SHARED BRAND HEADER (above the card)
+   ============================================ */
+.auth-brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: var(--phb-space-6);
+}
+.auth-brand-logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-2);
+}
+.auth-brand-wordmark {
+    font-size: var(--phb-text-2xl);
+    font-weight: var(--phb-fw-bold);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--phb-text-primary);
+}
+.auth-brand-wordmark .accent {
+    color: var(--phb-primary);
+}
+.auth-brand-tagline {
+    margin: 0;
+    font-size: var(--phb-text-xs);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+}
+
+@media (max-width: 480px) {
+    .auth-brand-header {
+        flex-direction: column;
+    }
+}
+
+/* ============================================
+   CARD SHELL
+   ============================================ */
+.auth-card {
+    border-radius: 20px;
+    box-shadow: var(--phb-shadow-lg);
+    overflow: hidden;
+    background: var(--phb-bg-surface);
+}
+
+/* ---- Login: split card ---- */
+.auth-card--login {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-hero-pane {
+    position: relative;
+    overflow: hidden;
+    color: var(--phb-white);
+    background:
+        linear-gradient(165deg, rgba(10, 14, 20, 0.72) 0%, rgba(20, 22, 28, 0.6) 45%, rgba(60, 35, 15, 0.55) 100%),
+        url('/PhentiBuild/frontend/assets/images/login-hero.png');
+    background-size: cover;
+    background-position: center 40%;
+    background-repeat: no-repeat;
+    padding: var(--phb-space-6) var(--phb-space-5);
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form-pane {
+    background: linear-gradient(165deg, #14171c 0%, #1c2026 100%);
+    padding: var(--phb-space-6) var(--phb-space-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-form-float {
+    width: 100%;
+    max-width: 380px;
+    background: #1a1d23;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: var(--phb-space-6);
+    box-shadow: var(--phb-shadow-md);
+}
+
+/* ---- Register: plain single pane ---- */
+.auth-card--register {
+    padding: var(--phb-space-6) var(--phb-space-5);
+}
+@media (min-width: 640px) {
+    .auth-card--register {
+        padding: var(--phb-space-7) var(--phb-space-6);
+    }
+}
+
+/* ============================================
+   HERO PANE OVERLAY — an extra dimming vignette on
+   top of the photo (set as .auth-hero-pane's own
+   background), so the brand text stays legible over
+   busier parts of the image.
+   ============================================ */
+.auth-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at 85% 100%, rgba(255, 102, 0, 0.22) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(5, 7, 10, 0.35) 0%, rgba(5, 7, 10, 0.1) 30%, rgba(5, 7, 10, 0.55) 100%);
+}
+
+.auth-hero-content {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    max-width: 440px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.auth-hero-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-6);
+}
+.auth-hero-brand span {
+    font-size: var(--phb-text-lg);
+    font-weight: var(--phb-fw-bold);
+    letter-spacing: 0.02em;
+    color: var(--phb-white);
+}
+
+.auth-hero-eyebrow {
+    margin: 0 0 var(--phb-space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-primary-border);
+}
+
+.auth-hero-title {
+    margin: 0 0 var(--phb-space-4);
+    font-size: var(--phb-text-3xl);
+    line-height: var(--phb-lh-tight);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-white);
+}
+.auth-hero-title .accent {
+    color: var(--phb-primary);
+}
+
+.auth-hero-lead {
+    margin: 0 0 var(--phb-space-6);
+    color: #c7ccd3;
+    line-height: var(--phb-lh-relaxed);
+}
+
+.auth-feature-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-5);
+}
+.auth-feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--phb-space-4);
+}
+
+.auth-feature-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--phb-radius-md);
+    background: var(--phb-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--phb-shadow-md);
+}
+.auth-feature-icon svg {
+    width: 20px;
+    height: 20px;
+    color: var(--phb-white);
+}
+
+.auth-feature-text {
+    display: block;
+    font-size: var(--phb-text-sm);
+    color: #c7ccd3;
+    line-height: var(--phb-lh-normal);
+    padding-top: 2px;
+}
+.auth-feature-text strong {
+    display: block;
+    color: var(--phb-white);
+    font-size: var(--phb-text-base);
+    font-weight: var(--phb-fw-semibold);
+    margin-bottom: 2px;
+}
+
+.auth-feature-row {
+    display: none;
+}
+
+/* ============================================
+   FORM CONTENT (shared classes used inside both
+   .auth-form-float (login) and .auth-card--register)
+   ============================================ */
+.auth-form-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+    flex-wrap: wrap;
+}
+
+.auth-form-heading h1 {
+    font-size: var(--phb-text-xl);
+    margin: 0 0 var(--phb-space-1);
+}
+.auth-form-heading h1 .accent {
+    color: var(--phb-primary);
+}
+.auth-form-heading p {
+    margin: 0;
+    color: var(--phb-text-secondary);
+}
+
+.auth-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    padding: var(--phb-space-2) var(--phb-space-4);
+    background: var(--phb-primary-light);
+    border: 1px solid var(--phb-primary-border);
+    border-radius: var(--phb-radius-full);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+    white-space: nowrap;
+}
+.auth-switch-pill a {
+    color: var(--phb-primary);
+    font-weight: var(--phb-fw-semibold);
+}
+
+.auth-form-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: -var(--phb-space-2) 0 var(--phb-space-5);
+    flex-wrap: wrap;
+    gap: var(--phb-space-2);
+}
+.auth-form-options .form-check {
+    margin-bottom: 0;
+}
+
+.auth-security-note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--phb-space-3);
+    background: var(--phb-primary-light);
+    border: 1px solid var(--phb-primary-border);
+    border-radius: var(--phb-radius-md);
+    padding: var(--phb-space-4);
+    margin-bottom: var(--phb-space-5);
+}
+.auth-security-note svg {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    color: var(--phb-primary);
+    margin-top: 1px;
+}
+.auth-security-note strong {
+    display: block;
+    color: var(--phb-text-primary);
+    font-size: var(--phb-text-sm);
+    margin-bottom: 2px;
+}
+.auth-security-note span {
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-secondary);
+}
+
+.auth-terms-check {
+    align-items: flex-start;
+}
+.auth-terms-check label {
+    line-height: var(--phb-lh-normal);
+}
+
+.auth-footer-note {
+    text-align: center;
+    margin-top: var(--phb-space-5);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+}
+
+/* ---- Login form theme (dark, nested in the glass card) ---- */
+.auth-form-float .auth-form-heading h1,
+.auth-form-float .form-label,
+.auth-form-float .form-check label {
+    color: var(--phb-white);
+}
+.auth-form-float .auth-form-heading p {
+    color: #a9afb8;
+}
+.auth-form-float .form-control {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: var(--phb-white);
+}
+.auth-form-float .form-control::placeholder {
+    color: #838a94;
+}
+.auth-form-float .auth-footer-note {
+    color: #a9afb8;
+}
+.auth-form-float .auth-footer-note a {
+    color: var(--phb-primary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Mobile (default): hero pane is a slim brand strip, no art/features */
+.auth-hero-pane {
+    padding: var(--phb-space-5);
+}
+.auth-hero-lead,
+.auth-feature-list,
+.auth-hero-eyebrow {
+    display: none;
+}
+.auth-hero-title {
+    font-size: var(--phb-text-xl);
+    margin-bottom: 0;
+}
+.auth-hero-content {
+    max-width: none;
+}
+.auth-hero-brand {
+    margin-bottom: 0;
+}
+.auth-form-pane {
+    padding: var(--phb-space-5) var(--phb-space-4);
+}
+.auth-form-float {
+    padding: var(--phb-space-5);
+}
+
+@media (min-width: 768px) {
+    .auth-card--login {
+        flex-direction: row;
+        min-height: 600px;
+    }
+    .auth-hero-pane {
+        flex: 1 1 56%;
+        padding: var(--phb-space-7) var(--phb-space-6);
+    }
+    .auth-form-pane {
+        flex: 1 1 44%;
+        padding: var(--phb-space-6);
+    }
+    .auth-hero-eyebrow {
+        display: block;
+    }
+    .auth-hero-title {
+        font-size: var(--phb-text-2xl);
+        margin-bottom: var(--phb-space-3);
+    }
+    .auth-hero-brand {
+        margin-bottom: var(--phb-space-5);
+    }
+    .auth-hero-lead {
+        display: block;
+        margin-bottom: var(--phb-space-6);
+    }
+
+    /* Feature list becomes a condensed icon-only row at tablet width */
+    .auth-feature-list {
+        display: none;
+    }
+    .auth-feature-row {
+        display: flex;
+        gap: var(--phb-space-4);
+    }
+    .auth-feature-row .auth-feature-icon {
+        width: 38px;
+        height: 38px;
+    }
+    .auth-feature-row .auth-feature-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .auth-hero-title {
+        font-size: var(--phb-text-3xl);
+    }
+
+    /* Back to the full descriptive list on desktop */
+    .auth-feature-row {
+        display: none;
+    }
+    .auth-feature-list {
+        display: flex;
+    }
+
+    .auth-card--register {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 599px) {
+    .auth-form-toolbar {
+        flex-direction: column;
+    }
+    .auth-switch-pill {
+        align-self: stretch;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+    }
+    .auth-card {
+        border-radius: 14px;
+    }
+}

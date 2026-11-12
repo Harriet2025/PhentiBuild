@@ -1,0 +1,75 @@
+/*
+ * PhentiBuild (PhB) - Modals
+ * Structural styles only. Open/close state will be controlled by JS
+ * (toggling the .is-open class on .modal-overlay) once interactivity
+ * is introduced in a later stage.
+ */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(43, 43, 43, 0.6);
+    align-items: center;
+    justify-content: center;
+    padding: var(--phb-space-4);
+    z-index: var(--phb-z-modal);
+}
+
+.modal-overlay.is-open {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - var(--phb-space-8));
+    background-color: var(--phb-bg-surface);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-sm { max-width: 400px; }
+.modal-lg { max-width: 800px; }
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-5);
+    border-bottom: 1px solid var(--phb-border-color);
+}
+
+.modal-header h2, .modal-header h3 {
+    margin: 0;
+}
+
+.modal-close {
+    font-size: var(--phb-text-lg);
+    line-height: 1;
+    color: var(--phb-text-muted);
+    cursor: pointer;
+    padding: var(--phb-space-1) var(--phb-space-2);
+}
+.modal-close:hover {
+    color: var(--phb-text-primary);
+}
+
+.modal-body {
+    padding: var(--phb-space-5);
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-4) var(--phb-space-5);
+    border-top: 1px solid var(--phb-border-color);
+    background-color: var(--phb-bg-subtle);
+}

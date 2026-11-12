@@ -1,0 +1,360 @@
+/*
+ * PhentiBuild (PhB) - Materials Catalog
+ * Toolbar, card/table view toggle, card grid, table tweaks, empty states
+ * and the View / Add-Edit modal specifics. Base card/table/modal/badge
+ * styling comes from css/components/*; this file adds only what's unique
+ * to the catalog.
+ */
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+.materials-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-4);
+}
+
+.materials-search {
+    position: relative;
+    flex: 1;
+}
+
+.materials-search svg {
+    position: absolute;
+    left: var(--phb-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--phb-text-muted);
+    pointer-events: none;
+}
+
+.materials-search input {
+    padding-left: var(--phb-space-7);
+}
+
+.materials-search input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+.materials-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--phb-space-3);
+    align-items: center;
+}
+
+.materials-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-3);
+    min-height: 32px;
+}
+
+/* ============================================
+   VIEW TOGGLE
+   ============================================ */
+.view-toggle {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-sm);
+    overflow: hidden;
+    justify-self: start;
+}
+
+.view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    color: var(--phb-text-secondary);
+    background-color: var(--phb-bg-surface);
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+}
+
+.view-toggle-btn + .view-toggle-btn {
+    border-left: 1px solid var(--phb-border-color-strong);
+}
+
+.view-toggle-btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+.view-toggle-btn:hover {
+    background-color: var(--phb-bg-subtle);
+    color: var(--phb-text-primary);
+}
+
+.view-toggle-btn.is-active {
+    background-color: var(--phb-primary-light);
+    color: var(--phb-primary-dark);
+}
+
+/* ============================================
+   TABLE VIEW
+   ============================================ */
+.materials-table-wrap .table {
+    min-width: 720px;
+}
+
+.materials-table-wrap .table td:last-child,
+.materials-table-wrap .table th:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.material-name {
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+    display: block;
+}
+
+.material-id {
+    display: block;
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+    margin-top: 2px;
+}
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--phb-space-1);
+}
+
+.icon-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--phb-radius-sm);
+    color: var(--phb-text-secondary);
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+}
+
+.icon-action svg {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-action:hover {
+    background-color: var(--phb-gray-200);
+    color: var(--phb-text-primary);
+}
+
+/* ============================================
+   CARD VIEW
+   ============================================ */
+.materials-card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-4);
+}
+
+.material-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-3);
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+    padding: var(--phb-space-4);
+}
+
+.material-card > .badge {
+    align-self: flex-start;
+}
+
+.material-card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+}
+
+.material-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: var(--phb-radius-sm);
+    background-color: var(--phb-gray-200);
+    color: var(--phb-slate);
+}
+
+.material-card-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Category accent colours. A few categories share a neutral tone
+   deliberately — the icon shape carries the rest of the distinction. */
+.material-card-icon.cat-sand      { background-color: var(--phb-warning-bg); color: var(--phb-warning); }
+.material-card-icon.cat-blocks    { background-color: var(--phb-primary-light); color: var(--phb-primary-dark); }
+.material-card-icon.cat-rebar     { background-color: var(--phb-info-bg); color: var(--phb-info); }
+.material-card-icon.cat-timber    { background-color: var(--phb-success-bg); color: var(--phb-success); }
+.material-card-icon.cat-roofing   { background-color: var(--phb-danger-bg); color: var(--phb-danger); }
+
+.material-card-title {
+    min-width: 0;
+}
+
+.material-card-meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--phb-space-2) var(--phb-space-4);
+    font-size: var(--phb-text-sm);
+    margin: 0;
+}
+
+.material-card-meta dt {
+    color: var(--phb-text-muted);
+    font-size: var(--phb-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: var(--phb-fw-semibold);
+    align-self: start;
+}
+
+.material-card-meta dd {
+    margin: 0;
+    color: var(--phb-text-primary);
+}
+
+.material-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    padding-top: var(--phb-space-3);
+    border-top: 1px solid var(--phb-border-color);
+}
+
+.material-card-updated {
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
+.materials-empty {
+    text-align: center;
+    padding: var(--phb-space-8) var(--phb-space-5);
+    background-color: var(--phb-bg-surface);
+    border: 2px dashed var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-md);
+}
+
+.materials-empty .empty-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto var(--phb-space-4);
+    color: var(--phb-slate-light);
+    display: block;
+}
+
+.materials-empty h3 {
+    margin-bottom: var(--phb-space-2);
+}
+
+.materials-empty p {
+    max-width: 420px;
+    margin: 0 auto var(--phb-space-5);
+}
+
+/* ============================================
+   VIEW MODAL
+   ============================================ */
+.modal-header-view {
+    position: relative;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--phb-space-2);
+}
+
+.modal-header-view .modal-close {
+    position: absolute;
+    top: var(--phb-space-4);
+    right: var(--phb-space-4);
+}
+
+.modal-header-view h3 {
+    margin: 0;
+}
+
+.material-view-description {
+    margin-top: var(--phb-space-5);
+    padding-top: var(--phb-space-4);
+    border-top: 1px solid var(--phb-border-color);
+}
+
+.material-view-description h4 {
+    margin-bottom: var(--phb-space-2);
+}
+
+.material-view-description p {
+    margin: 0;
+    color: var(--phb-text-secondary);
+}
+
+[data-view-updated] {
+    margin-top: var(--phb-space-4);
+    margin-bottom: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (min-width: 640px) {
+    .materials-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .materials-toolbar {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .materials-search {
+        flex: 1 1 240px;
+        min-width: 220px;
+    }
+
+    .materials-filters {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        flex: 0 0 auto;
+    }
+
+    .materials-filters .form-control {
+        min-width: 160px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .materials-card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1400px) {
+    .materials-card-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}

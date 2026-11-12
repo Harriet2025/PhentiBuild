@@ -1,0 +1,52 @@
+/*
+ * PhentiBuild (PhB) - Settings
+ * Tab strip + card stack. Field/alert/button styling comes from
+ * css/components/*; this file only covers the layout unique to this page.
+ */
+
+.settings-tabs {
+    display: flex;
+    gap: var(--phb-space-2);
+    margin-bottom: var(--phb-space-5);
+    border-bottom: 1px solid var(--phb-border-color);
+}
+
+.settings-tab {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color var(--phb-transition-fast), border-color var(--phb-transition-fast);
+}
+
+.settings-tab:hover {
+    color: var(--phb-text-primary);
+}
+
+.settings-tab.is-active {
+    color: var(--phb-primary-dark);
+    border-bottom-color: var(--phb-primary);
+}
+
+.settings-panel[hidden] {
+    display: none;
+}
+
+.settings-card {
+    max-width: 720px;
+    margin-bottom: var(--phb-space-5);
+}
+
+.settings-card:last-child {
+    margin-bottom: 0;
+}
+
+.settings-panel-intro {
+    margin: 0 0 var(--phb-space-4);
+}
+
+.settings-inline-input {
+    max-width: 200px;
+}

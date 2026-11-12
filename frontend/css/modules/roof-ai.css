@@ -1,0 +1,40 @@
+/*
+ * PhentiBuild (PhB) - AI Roof Generation modal
+ * Base modal/alert/form/badge styling comes from css/components/*; this
+ * file only covers the bits unique to the generated-proposal layout.
+ */
+
+.rs-ai-notice {
+    margin-bottom: var(--phb-space-4);
+}
+
+.rs-ai-loading {
+    margin: var(--phb-space-4) 0;
+}
+
+[data-rs-ai-result] h4 {
+    margin: 0 0 var(--phb-space-3);
+}
+
+.rs-ai-facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--phb-space-2) var(--phb-space-4);
+    margin: 0 0 var(--phb-space-3);
+}
+.rs-ai-facts dt {
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    font-size: var(--phb-text-sm);
+}
+.rs-ai-facts dd {
+    margin: 0;
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+}
+
+.rs-ai-edit-form {
+    margin-top: var(--phb-space-4);
+    padding-top: var(--phb-space-4);
+    border-top: 1px solid var(--phb-border-color);
+}

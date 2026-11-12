@@ -1,0 +1,88 @@
+/*
+ * PhentiBuild (PhB) - Excel Export Center
+ * Layout for the export trigger card and the recent-exports list. Base
+ * card/table/badge styling comes from css/components/*.
+ */
+
+.reports-export-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--phb-space-6);
+    padding: var(--phb-space-6);
+    margin-bottom: var(--phb-space-6);
+    align-items: flex-start;
+}
+
+.reports-export-main {
+    flex: 1 1 320px;
+    min-width: 260px;
+}
+
+.reports-project-select {
+    margin-bottom: var(--phb-space-4);
+}
+
+.reports-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+}
+
+.reports-sheet-list {
+    flex: 1 1 220px;
+    list-style: none;
+    margin: 0;
+    padding: var(--phb-space-4) var(--phb-space-5);
+    background: var(--phb-bg-subtle);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+    display: grid;
+    gap: var(--phb-space-2);
+}
+.reports-sheet-list li {
+    position: relative;
+    padding-left: var(--phb-space-5);
+}
+.reports-sheet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--phb-radius-full);
+    background: var(--phb-primary);
+}
+
+.reports-recent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--phb-space-3);
+}
+.reports-recent-header h2 {
+    margin: 0;
+    font-size: var(--phb-text-lg);
+}
+
+.reports-empty {
+    text-align: center;
+    padding: var(--phb-space-8) var(--phb-space-5);
+}
+.reports-empty .empty-icon {
+    width: 44px;
+    height: 44px;
+    color: var(--phb-text-muted);
+    margin-bottom: var(--phb-space-3);
+}
+.reports-empty h3 {
+    margin: 0 0 var(--phb-space-2);
+}
+
+@media (max-width: 640px) {
+    .reports-export-card {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,73 @@
+/*
+ * PhentiBuild (PhB) - Alerts
+ * Dismissible alerts use a checkbox hack (pure HTML/CSS, no JS required):
+ * a hidden checkbox + label-as-close-button, styled with the
+ * checkbox:checked ~ .alert selector to collapse the alert.
+ */
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-4) var(--phb-space-5);
+    border: 1px solid transparent;
+    border-left-width: 4px;
+    border-radius: var(--phb-radius-sm);
+    font-size: var(--phb-text-sm);
+    margin-bottom: var(--phb-space-4);
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--phb-fw-bold);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-white);
+}
+
+.alert-body {
+    flex: 1;
+}
+
+.alert-title {
+    font-weight: var(--phb-fw-bold);
+    margin-bottom: var(--phb-space-1);
+    display: block;
+}
+
+.alert-success { background-color: var(--phb-success-bg); border-color: var(--phb-success-border); border-left-color: var(--phb-success); color: var(--phb-success); }
+.alert-warning { background-color: var(--phb-warning-bg); border-color: var(--phb-warning-border); border-left-color: var(--phb-warning); color: var(--phb-warning); }
+.alert-danger  { background-color: var(--phb-danger-bg);  border-color: var(--phb-danger-border);  border-left-color: var(--phb-danger);  color: var(--phb-danger); }
+.alert-info    { background-color: var(--phb-info-bg);    border-color: var(--phb-info-border);    border-left-color: var(--phb-info);    color: var(--phb-info); }
+
+.alert-success .alert-icon { background-color: var(--phb-success); }
+.alert-warning .alert-icon { background-color: var(--phb-warning); }
+.alert-danger  .alert-icon { background-color: var(--phb-danger); }
+.alert-info    .alert-icon { background-color: var(--phb-info); }
+
+.alert .alert-close {
+    flex-shrink: 0;
+    cursor: pointer;
+    font-size: var(--phb-text-md);
+    line-height: 1;
+    color: inherit;
+    opacity: 0.6;
+    padding: 0 var(--phb-space-1);
+}
+.alert .alert-close:hover {
+    opacity: 1;
+}
+
+/* Dismissible wrapper: <input type="checkbox" class="alert-dismiss-toggle" id="..." hidden>
+   <div class="alert ..."> ... <label for="..." class="alert-close">&times;</label></div> */
+.alert-dismiss-toggle {
+    display: none;
+}
+.alert-dismiss-toggle:checked + .alert {
+    display: none;
+}

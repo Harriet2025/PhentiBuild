@@ -1,0 +1,9 @@
+# Environment / secrets — never commit real credentials
+.env
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+
+# Composer dependencies — restore with: php composer.phar install
+vendor/

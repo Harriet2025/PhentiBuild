@@ -1,0 +1,129 @@
+/*
+ * PhentiBuild (PhB) - Camera Scanner
+ * Camera frame, status bar, and the scan-result panel. Base card/badge/
+ * alert/form styling comes from css/components/*.
+ */
+
+.scanner-cv-notice {
+    margin-bottom: var(--phb-space-5);
+}
+
+.scanner-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-5);
+    margin-bottom: var(--phb-space-6);
+}
+
+@media (min-width: 900px) {
+    .scanner-layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        align-items: start;
+    }
+}
+
+.scanner-camera-card,
+.scanner-result-card {
+    padding: var(--phb-space-5);
+}
+
+.scanner-camera-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--phb-charcoal);
+    border-radius: var(--phb-radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--phb-space-4);
+}
+
+.scanner-camera-frame video,
+.scanner-camera-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.scanner-camera-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--phb-space-2);
+    color: var(--phb-slate-light);
+}
+.scanner-camera-placeholder svg {
+    width: 40px;
+    height: 40px;
+}
+.scanner-camera-placeholder p {
+    margin: 0;
+    font-size: var(--phb-text-sm);
+}
+
+.scanner-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--phb-space-4);
+}
+
+.scanner-camera-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--phb-space-3);
+}
+
+.scanner-result-card h3 {
+    margin: 0 0 var(--phb-space-4);
+}
+
+.scanner-result-facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--phb-space-2) var(--phb-space-4);
+    margin: 0 0 var(--phb-space-3);
+}
+.scanner-result-facts dt {
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    font-size: var(--phb-text-sm);
+}
+.scanner-result-facts dd {
+    margin: 0;
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+}
+
+.scanner-edit-form {
+    margin-top: var(--phb-space-4);
+    padding-top: var(--phb-space-4);
+    border-top: 1px solid var(--phb-border-color);
+}
+
+.scanner-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--phb-space-3);
+    margin-top: var(--phb-space-5);
+}
+
+.scanner-roadmap-card {
+    padding: var(--phb-space-5);
+}
+.scanner-roadmap-card h3 {
+    margin: 0 0 var(--phb-space-2);
+}
+.scanner-roadmap-list {
+    margin: var(--phb-space-3) 0 0;
+    padding-left: var(--phb-space-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--phb-space-2) var(--phb-space-5);
+    color: var(--phb-text-secondary);
+    font-size: var(--phb-text-sm);
+}

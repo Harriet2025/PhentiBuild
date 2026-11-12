@@ -1,0 +1,72 @@
+/*
+ * PhentiBuild (PhB) - Reset
+ * Minimal, modern reset. Not a full normalize — just enough to get a
+ * consistent, predictable baseline across browsers.
+ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+h1, h2, h3, h4, h5, h6,
+p, figure, blockquote, dl, dd {
+    margin: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* A single overflowing element anywhere in the app (a wide table, an
+       unwrapped label) must never let the whole page scroll sideways —
+       that component should grow its own scroll container instead. */
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+img, picture, svg, video {
+    display: block;
+    max-width: 100%;
+}
+
+input, button, textarea, select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+/*
+ * The `hidden` attribute must always win. Without !important any component
+ * rule that sets `display` (.btn, .table-wrap, grids…) has equal specificity
+ * and silently overrides it, leaving "hidden" elements visible.
+ */
+[hidden] {
+    display: none !important;
+}

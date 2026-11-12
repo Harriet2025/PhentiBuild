@@ -1,0 +1,94 @@
+/*
+ * PhentiBuild (PhB) - Tables
+ * Used heavily for BOQ, material lists, quantity schedules.
+ */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--phb-bg-surface);
+    font-size: var(--phb-text-sm);
+}
+
+.table caption {
+    text-align: left;
+    padding: var(--phb-space-3) 0;
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+.table thead th {
+    background-color: var(--phb-charcoal);
+    color: var(--phb-white);
+    text-align: left;
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: var(--phb-space-3) var(--phb-space-4);
+    white-space: nowrap;
+}
+
+.table thead th.text-right,
+.table td.text-right {
+    text-align: right;
+}
+
+.table tbody td {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    border-bottom: 1px solid var(--phb-border-color);
+    color: var(--phb-text-primary);
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background-color: var(--phb-primary-light);
+}
+
+.table-striped tbody tr:nth-child(even) {
+    background-color: var(--phb-bg-subtle);
+}
+.table-striped tbody tr:nth-child(even):hover {
+    background-color: var(--phb-primary-light);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--phb-border-color);
+}
+
+.table-sm th,
+.table-sm td {
+    padding: var(--phb-space-2) var(--phb-space-3);
+}
+
+/* Numeric columns (quantities, measurements) — aligned, monospace */
+.table td.cell-numeric,
+.table th.cell-numeric {
+    font-family: var(--phb-font-mono);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.table tfoot td {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    font-weight: var(--phb-fw-bold);
+    background-color: var(--phb-bg-subtle);
+    border-top: 2px solid var(--phb-border-color-strong);
+}
+
+.table-empty-state {
+    text-align: center;
+    padding: var(--phb-space-7) var(--phb-space-4);
+    color: var(--phb-text-muted);
+}

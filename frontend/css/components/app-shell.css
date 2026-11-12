@@ -1,0 +1,456 @@
+/*
+ * PhentiBuild (PhB) - Application Shell
+ * The persistent layout every real module will be mounted into:
+ * sidebar + topbar + main content area. Reuses .sidebar-link,
+ * .sidebar-section-label and .topbar from navigation.css for the
+ * repeated visual language, and adds the shell-specific structure,
+ * the off-canvas mobile/tablet drawer, and dropdown panels.
+ */
+
+.shell {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--phb-bg-page);
+}
+
+/* ============================================
+   SIDEBAR (off-canvas below 1024px, permanent above)
+   ============================================ */
+.shell-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    max-width: 85vw;
+    background-color: var(--phb-charcoal);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform var(--phb-transition-base);
+    z-index: var(--phb-z-modal);
+}
+
+.shell-sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: var(--phb-shadow-lg);
+}
+
+.shell-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-2);
+    height: 64px;
+    padding: 0 var(--phb-space-5);
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.shell-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-lg);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-white);
+}
+
+.shell-brand .brand-mark {
+    color: var(--phb-primary);
+}
+
+.shell-brand .brand-logo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.shell-sidebar-close {
+    color: var(--phb-gray-300);
+    font-size: var(--phb-text-lg);
+    line-height: 1;
+    padding: var(--phb-space-2);
+}
+
+.shell-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--phb-space-3) 0;
+}
+
+.shell-nav .sidebar-link {
+    cursor: pointer;
+}
+
+.shell-sidebar-footer {
+    flex-shrink: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: var(--phb-space-2) 0;
+}
+
+.shell-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(43, 43, 43, 0.55);
+    z-index: 999;
+}
+
+.shell-overlay.is-open {
+    display: block;
+}
+
+/* ============================================
+   TOPBAR
+   ============================================ */
+.shell-topbar {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-4);
+    padding: 0 var(--phb-space-4);
+}
+
+.shell-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+    min-width: 0;
+}
+
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    color: var(--phb-white);
+    border-radius: var(--phb-radius-sm);
+}
+.sidebar-toggle:hover {
+    background-color: var(--phb-charcoal-light);
+}
+
+.shell-page-title {
+    font-size: var(--phb-text-md);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-white);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shell-topbar-search {
+    flex: 1;
+    max-width: 420px;
+    position: relative;
+}
+
+.shell-topbar-search input {
+    width: 100%;
+    min-height: 40px;
+    padding: 0 var(--phb-space-4) 0 var(--phb-space-7);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--phb-radius-sm);
+    color: var(--phb-white);
+    font-size: var(--phb-text-sm);
+}
+.shell-topbar-search input::placeholder {
+    color: var(--phb-gray-400);
+}
+.shell-topbar-search input:focus {
+    outline: none;
+    border-color: var(--phb-primary);
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.shell-topbar-search svg {
+    position: absolute;
+    left: var(--phb-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--phb-gray-400);
+    pointer-events: none;
+}
+
+/* ============================================
+   GLOBAL MODE SWITCH — Camera Scanner <-> Manual Input, present in the
+   topbar on every screen (not just the sidebar), so the two data-capture
+   modes are always one tap away regardless of lighting or camera
+   availability on site. Uses the same [data-module] wiring as every
+   other nav link (see frontend/js/app-shell.js) — no separate JS.
+   ============================================ */
+.shell-mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    flex-shrink: 0;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--phb-radius-sm);
+}
+
+.shell-mode-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    height: 34px;
+    padding: 0 var(--phb-space-3);
+    border-radius: 4px;
+    color: var(--phb-gray-300);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    white-space: nowrap;
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+}
+
+.shell-mode-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.shell-mode-btn:hover {
+    color: var(--phb-white);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.shell-mode-btn.is-active {
+    background-color: var(--phb-primary);
+    color: var(--phb-white);
+}
+
+.shell-mode-btn-label {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .shell-mode-btn-label {
+        display: inline;
+    }
+}
+
+.shell-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    margin-left: auto;
+}
+
+.shell-icon-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    height: 40px;
+    padding: 0 var(--phb-space-2);
+    color: var(--phb-white);
+    border-radius: var(--phb-radius-sm);
+}
+.shell-icon-btn:hover {
+    background-color: var(--phb-charcoal-light);
+}
+
+.shell-icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.shell-badge-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--phb-radius-full);
+    background-color: var(--phb-primary);
+    color: var(--phb-white);
+    font-size: 10px;
+    font-weight: var(--phb-fw-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.shell-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--phb-primary);
+    color: var(--phb-white);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.shell-user-meta {
+    text-align: left;
+    line-height: 1.2;
+}
+.shell-user-name {
+    display: block;
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-white);
+}
+.shell-user-role {
+    display: block;
+    font-size: var(--phb-text-xs);
+    color: var(--phb-gray-400);
+}
+
+/* ============================================
+   DROPDOWNS (notifications / user menu)
+   ============================================ */
+.shell-dropdown {
+    position: relative;
+}
+
+.shell-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + var(--phb-space-2));
+    right: 0;
+    width: 280px;
+    max-width: calc(100vw - var(--phb-space-4) * 2);
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-lg);
+    overflow: hidden;
+    z-index: var(--phb-z-dropdown);
+}
+
+.shell-dropdown-panel.is-open {
+    display: block;
+}
+
+.shell-dropdown-header {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    border-bottom: 1px solid var(--phb-border-color);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--phb-text-secondary);
+}
+
+.shell-dropdown-item {
+    display: block;
+    padding: var(--phb-space-3) var(--phb-space-4);
+    border-bottom: 1px solid var(--phb-border-color);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+}
+.shell-dropdown-item:last-child {
+    border-bottom: none;
+}
+.shell-dropdown-item:hover {
+    background-color: var(--phb-bg-subtle);
+    text-decoration: none;
+}
+
+.shell-dropdown-item .item-meta {
+    display: block;
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+    margin-top: 2px;
+}
+
+.shell-dropdown-empty {
+    padding: var(--phb-space-5) var(--phb-space-4);
+    text-align: center;
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-muted);
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+.shell-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.shell-main {
+    flex: 1;
+    padding: var(--phb-space-5) var(--phb-space-4);
+}
+
+.module-panel {
+    max-width: 1280px;
+}
+
+.module-panel[hidden] {
+    display: none;
+}
+
+.module-placeholder {
+    margin-top: var(--phb-space-5);
+    padding: var(--phb-space-8) var(--phb-space-5);
+    text-align: center;
+    background-color: var(--phb-bg-surface);
+    border: 2px dashed var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-md);
+    color: var(--phb-text-secondary);
+}
+
+.module-placeholder .placeholder-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--phb-space-4);
+    color: var(--phb-slate-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.module-placeholder .placeholder-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.module-placeholder h3 {
+    margin-bottom: var(--phb-space-2);
+    color: var(--phb-text-primary);
+}
+
+/* ============================================
+   RESPONSIVE: permanent sidebar from 1024px up
+   ============================================ */
+@media (min-width: 1024px) {
+    .shell-sidebar {
+        position: sticky;
+        transform: none;
+        max-width: none;
+        box-shadow: none;
+        flex-shrink: 0;
+    }
+
+    .shell-sidebar-close,
+    .sidebar-toggle {
+        display: none;
+    }
+
+    .shell-overlay {
+        display: none !important;
+    }
+
+    .shell-main {
+        padding: var(--phb-space-6);
+    }
+}
