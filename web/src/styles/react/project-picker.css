@@ -1,0 +1,36 @@
+/* "Save to project" picker in module headers — layout only, it reuses the
+   existing .form-group / .form-label / .form-control styles and colours. */
+.project-picker {
+  margin: 0;
+  min-width: 240px;
+  max-width: 320px;
+}
+
+.project-picker .form-label {
+  font-size: var(--phb-text-xs);
+  margin-bottom: 4px;
+}
+
+.module-header-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--phb-space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .project-picker {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+  .module-header-actions {
+    width: 100%;
+  }
+}
+
+/* Roof Studio header: room for the "Roof design for" picker. */
+.rs-header-actions {
+  flex-wrap: wrap;
+  align-items: flex-end;
+}

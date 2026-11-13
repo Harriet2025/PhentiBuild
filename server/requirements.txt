@@ -1,0 +1,8 @@
+# PhentiBuild backend — exact versions (reproducible builds).
+Django==5.2.19
+djangorestframework==3.16.1
+mysqlclient==2.2.8
+bcrypt==5.0.0
+openpyxl==3.1.5
+python-dotenv==1.2.4
+gunicorn==23.0.0

@@ -1,0 +1,58 @@
+# PhentiBuild backend stack for Coolify ("Docker Compose" build pack).
+#
+#   api — Django REST backend (this folder's Dockerfile), port 8000
+#   db  — MariaDB 11.4 LTS with a persistent volume
+#
+# In Coolify: New Resource → Docker Compose → point it at this file
+# (base directory: /server). Set the variables marked ${...} in Coolify's
+# Environment Variables screen, and attach your API domain to `api`.
+# Import your data once with docs/DEPLOYMENT.md → "Load the database".
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      DJANGO_DEBUG: "false"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?set DJANGO_SECRET_KEY}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?set DJANGO_ALLOWED_HOSTS}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:?set DJANGO_CSRF_TRUSTED_ORIGINS}
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: phentibuild
+      DB_USER: phentibuild_app
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      TIME_ZONE: ${TIME_ZONE:-Africa/Accra}
+      TZ: ${TIME_ZONE:-Africa/Accra}
+      ROOF_AI_API_URL: ${ROOF_AI_API_URL:-}
+      ROOF_AI_API_KEY: ${ROOF_AI_API_KEY:-}
+      ROOF_AI_MODEL: ${ROOF_AI_MODEL:-}
+    expose:
+      - "8000"
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: phentibuild
+      MARIADB_USER: phentibuild_app
+      MARIADB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD}
+      TZ: ${TIME_ZONE:-Africa/Accra}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - phentibuild-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  phentibuild-db:

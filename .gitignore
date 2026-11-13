@@ -7,3 +7,14 @@ Thumbs.db
 
 # Composer dependencies — restore with: php composer.phar install
 vendor/
+
+# Python / Django backend
+server/.venv/
+server/.env
+__pycache__/
+*.pyc
+
+# Frontend build output & local env overrides
+web/dist/
+web/.env.local
+web/.env.*.local

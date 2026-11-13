@@ -1,0 +1,314 @@
+/*
+ * PhentiBuild (PhB) - 2D Roof Studio
+ * Toolbar, canvas workspace, properties sidebar and status bar. The
+ * canvas itself is drawn by roof-studio-canvas.js; this file only sizes
+ * and frames it.
+ */
+
+.rs-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-3);
+}
+
+[data-rs-save-status] {
+    transition: color var(--phb-transition-fast);
+}
+[data-rs-save-status].is-flash {
+    color: var(--phb-success);
+}
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+.rs-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-3);
+    margin-bottom: var(--phb-space-4);
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+}
+
+.rs-tool-group {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-1);
+}
+
+.rs-tool-divider {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--phb-border-color);
+}
+
+.rs-tool-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    height: 38px;
+    padding: 0 var(--phb-space-3);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-text-secondary);
+    border-radius: var(--phb-radius-sm);
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+    white-space: nowrap;
+}
+
+.rs-tool-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.rs-tool-btn span {
+    display: none;
+}
+
+.rs-tool-btn:hover:not(:disabled) {
+    background-color: var(--phb-bg-subtle);
+    color: var(--phb-text-primary);
+}
+
+.rs-tool-btn.is-active {
+    background-color: var(--phb-primary-light);
+    color: var(--phb-primary-dark);
+}
+
+.rs-tool-btn:disabled {
+    color: var(--phb-gray-400);
+    cursor: not-allowed;
+}
+
+.rs-tool-btn-icon {
+    padding: 0;
+    width: 38px;
+    justify-content: center;
+}
+
+.rs-zoom-readout {
+    min-width: 48px;
+    text-align: center;
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-secondary);
+}
+
+.rs-snap-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.rs-snap-toggle input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--phb-primary);
+    cursor: pointer;
+}
+
+/* ============================================
+   VIEW TABS (2D Plan / 3D View)
+   ============================================ */
+.rs-view-tabs {
+    display: flex;
+    gap: var(--phb-space-2);
+    margin-bottom: var(--phb-space-4);
+    border-bottom: 1px solid var(--phb-border-color);
+}
+
+.rs-view-tab {
+    padding: var(--phb-space-3) var(--phb-space-4);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color var(--phb-transition-fast), border-color var(--phb-transition-fast);
+}
+
+.rs-view-tab:hover {
+    color: var(--phb-text-primary);
+}
+
+.rs-view-tab.is-active {
+    color: var(--phb-primary-dark);
+    border-bottom-color: var(--phb-primary);
+}
+
+/* ============================================
+   3D TOOLBAR EXTRAS (component toggles)
+   ============================================ */
+.rs-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--phb-space-3);
+}
+
+.rs-toggle-item {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.rs-toggle-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--phb-primary);
+    cursor: pointer;
+}
+
+.rs-toggle-item.is-disabled {
+    color: var(--phb-gray-400);
+    cursor: not-allowed;
+}
+
+.rs-toggle-item.is-disabled input {
+    cursor: not-allowed;
+}
+
+.rs-3d-unsupported {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--phb-space-6);
+    text-align: center;
+    background-color: var(--phb-bg-surface);
+    color: var(--phb-text-secondary);
+    font-size: var(--phb-text-sm);
+}
+
+/* ============================================
+   WORKSPACE (canvas + properties sidebar)
+   ============================================ */
+.rs-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-4);
+    margin-bottom: var(--phb-space-3);
+}
+
+.rs-view-panels {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.rs-view-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-4);
+}
+
+.rs-view-panel[hidden] {
+    display: none;
+}
+
+.rs-canvas-wrap {
+    position: relative;
+    height: 65vh;
+    min-height: 420px;
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+    overflow: hidden;
+    touch-action: none;
+}
+
+.rs-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+.rs-hint {
+    position: absolute;
+    top: var(--phb-space-3);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--phb-space-2) var(--phb-space-4);
+    background-color: var(--phb-charcoal);
+    color: var(--phb-white);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-medium);
+    border-radius: var(--phb-radius-full);
+    box-shadow: var(--phb-shadow-md);
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: calc(100% - var(--phb-space-6));
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rs-properties {
+    flex-shrink: 0;
+}
+
+.rs-properties .card-body .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   STATUS BAR
+   ============================================ */
+.rs-statusbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--phb-space-4);
+    padding: var(--phb-space-2) var(--phb-space-3);
+    background-color: var(--phb-bg-subtle);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-sm);
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (min-width: 640px) {
+    .rs-tool-btn span {
+        display: inline;
+    }
+}
+
+@media (min-width: 1024px) {
+    .rs-workspace {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .rs-view-panels {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .rs-canvas-wrap {
+        height: 72vh;
+    }
+
+    .rs-properties {
+        width: 300px;
+    }
+}

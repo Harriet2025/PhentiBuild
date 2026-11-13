@@ -1,0 +1,355 @@
+/*
+ * PhentiBuild (PhB) - Projects Module
+ * Listing layout: header, toolbar, table view (tablet/desktop),
+ * card view (mobile) and empty states.
+ */
+
+.module-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--phb-space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--phb-space-5);
+}
+
+.module-header h1 {
+    margin-bottom: var(--phb-space-1);
+}
+
+.module-header p {
+    margin: 0;
+}
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+.projects-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-4);
+}
+
+.projects-search {
+    position: relative;
+    flex: 1;
+}
+
+.projects-search svg {
+    position: absolute;
+    left: var(--phb-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--phb-text-muted);
+    pointer-events: none;
+}
+
+.projects-search input {
+    padding-left: var(--phb-space-7);
+}
+
+/* Hide the browser's native search clear button for a consistent look */
+.projects-search input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+.projects-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--phb-space-3);
+}
+
+.projects-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-3);
+    min-height: 32px;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    min-width: 120px;
+}
+
+.progress-track {
+    flex: 1;
+    height: 6px;
+    background-color: var(--phb-gray-200);
+    border-radius: var(--phb-radius-full);
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--phb-primary);
+    border-radius: var(--phb-radius-full);
+}
+
+.progress-bar.is-complete {
+    background-color: var(--phb-success);
+}
+
+.progress-value {
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-secondary);
+    min-width: 34px;
+    text-align: right;
+}
+
+/* ============================================
+   TABLE VIEW
+   ============================================ */
+.projects-table-wrap {
+    display: none;
+}
+
+/* Keep columns readable; .table-responsive scrolls when space runs out */
+.projects-table-wrap .table {
+    min-width: 860px;
+}
+
+/* Slightly tighter than the default table so all 8 columns fit a laptop */
+.projects-table-wrap .table th,
+.projects-table-wrap .table td {
+    padding-left: var(--phb-space-3);
+    padding-right: var(--phb-space-3);
+}
+
+.projects-table-wrap .progress {
+    min-width: 92px;
+}
+
+.projects-table-wrap .table td:first-child,
+.projects-table-wrap .table th:first-child {
+    min-width: 170px;
+}
+
+.projects-table-wrap .table td:nth-child(2),
+.projects-table-wrap .table td:nth-child(3) {
+    min-width: 105px;
+}
+
+.projects-table-wrap .table td:last-child,
+.projects-table-wrap .table th:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.project-name {
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+    display: block;
+}
+
+.project-ref {
+    display: block;
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+    margin-top: 2px;
+}
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--phb-space-1);
+}
+
+.icon-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--phb-radius-sm);
+    color: var(--phb-text-secondary);
+    transition: background-color var(--phb-transition-fast), color var(--phb-transition-fast);
+}
+
+.icon-action svg {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-action:hover {
+    background-color: var(--phb-gray-200);
+    color: var(--phb-text-primary);
+}
+
+.icon-action.is-danger:hover {
+    background-color: var(--phb-danger-bg);
+    color: var(--phb-danger);
+}
+
+/* ============================================
+   CARD VIEW (mobile)
+   ============================================ */
+.projects-card-list {
+    display: grid;
+    gap: var(--phb-space-4);
+}
+
+.project-card {
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-left: 4px solid var(--phb-primary);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+    padding: var(--phb-space-4);
+}
+
+.project-card.status-completed { border-left-color: var(--phb-success); }
+.project-card.status-on-hold   { border-left-color: var(--phb-warning); }
+.project-card.status-planning  { border-left-color: var(--phb-info); }
+
+.project-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-3);
+}
+
+.project-card-meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--phb-space-2) var(--phb-space-4);
+    font-size: var(--phb-text-sm);
+    margin-bottom: var(--phb-space-3);
+}
+
+.project-card-meta dt {
+    color: var(--phb-text-muted);
+    font-size: var(--phb-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: var(--phb-fw-semibold);
+    align-self: center;
+}
+
+.project-card-meta dd {
+    margin: 0;
+    color: var(--phb-text-primary);
+}
+
+.project-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    padding-top: var(--phb-space-3);
+    border-top: 1px solid var(--phb-border-color);
+}
+
+.project-card-updated {
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
+.projects-empty {
+    text-align: center;
+    padding: var(--phb-space-8) var(--phb-space-5);
+    background-color: var(--phb-bg-surface);
+    border: 2px dashed var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-md);
+}
+
+.projects-empty .empty-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto var(--phb-space-4);
+    color: var(--phb-slate-light);
+    display: block;
+}
+
+.projects-empty h3 {
+    margin-bottom: var(--phb-space-2);
+}
+
+.projects-empty p {
+    max-width: 420px;
+    margin: 0 auto var(--phb-space-5);
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.projects-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--phb-space-4);
+    padding: var(--phb-space-8) var(--phb-space-5);
+    text-align: center;
+}
+
+.projects-loading p {
+    margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE — swap card list for table at 768px
+   ============================================ */
+@media (min-width: 768px) {
+    .projects-toolbar {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .projects-search {
+        flex: 1 1 220px;
+        min-width: 220px;
+    }
+
+    .projects-filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        flex: 1 1 420px;
+    }
+
+    /* Selects must be allowed to shrink below their longest option text,
+       otherwise the toolbar overflows instead of wrapping. */
+    .projects-filters .form-control {
+        min-width: 0;
+    }
+
+    .projects-table-wrap {
+        display: block;
+    }
+
+    .projects-card-list {
+        display: none;
+    }
+}
+
+/*
+ * Between tablet and wide desktop there isn't room for all eight columns
+ * beside the sidebar, so Type is dropped — it stays available as a filter
+ * and is still shown on the mobile cards.
+ */
+@media (min-width: 768px) and (max-width: 1399px) {
+    .projects-table-wrap .table th:nth-child(4),
+    .projects-table-wrap .table td:nth-child(4) {
+        display: none;
+    }
+
+    .projects-table-wrap .table {
+        min-width: 760px;
+    }
+}

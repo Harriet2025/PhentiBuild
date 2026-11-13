@@ -1,0 +1,115 @@
+/*
+ * PhentiBuild (PhB) - History & Audit Log
+ * Toolbar, table specifics and empty states. Base card/table/badge
+ * styling comes from css/components/*; this file adds only what's
+ * unique to the audit log view.
+ */
+
+.history-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-4);
+}
+
+.history-search {
+    position: relative;
+    flex: 1;
+}
+.history-search svg {
+    position: absolute;
+    left: var(--phb-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--phb-text-muted);
+    pointer-events: none;
+}
+.history-search input {
+    padding-left: var(--phb-space-7);
+}
+.history-search input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+.history-filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--phb-space-3);
+}
+
+.history-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    margin-bottom: var(--phb-space-3);
+    min-height: 32px;
+}
+
+.history-table-wrap .table th,
+.history-table-wrap .table td {
+    white-space: nowrap;
+}
+.history-table-wrap .table td:last-child {
+    white-space: normal;
+    min-width: 280px;
+}
+
+.history-user-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+}
+.history-user-avatar {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--phb-radius-full);
+    background: var(--phb-primary-light);
+    color: var(--phb-primary-dark);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-project-cell {
+    font-size: var(--phb-text-sm);
+}
+.history-project-cell .history-project-ref {
+    display: block;
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+}
+.history-project-cell .history-project-name {
+    display: block;
+    color: var(--phb-text-muted);
+    font-size: var(--phb-text-xs);
+}
+
+.history-empty {
+    text-align: center;
+    padding: var(--phb-space-8) var(--phb-space-5);
+}
+.history-empty .empty-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--phb-text-muted);
+    margin-bottom: var(--phb-space-4);
+}
+.history-empty h3 {
+    margin: 0 0 var(--phb-space-2);
+}
+.history-empty p {
+    max-width: 420px;
+    margin: 0 auto var(--phb-space-4);
+}
+
+@media (max-width: 767px) {
+    .history-filters {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,177 @@
+/*
+ * PhentiBuild (PhB) - Forms & Inputs
+ */
+
+.form-group {
+    margin-bottom: var(--phb-space-5);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--phb-space-2);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    color: var(--phb-text-primary);
+}
+
+.form-label .required {
+    color: var(--phb-danger);
+    margin-left: var(--phb-space-1);
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: var(--phb-space-3) var(--phb-space-4);
+    font-size: var(--phb-text-base);
+    font-family: var(--phb-font-base);
+    color: var(--phb-text-primary);
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color-strong);
+    border-radius: var(--phb-radius-sm);
+    transition: border-color var(--phb-transition-fast), box-shadow var(--phb-transition-fast);
+}
+
+.form-control::placeholder {
+    color: var(--phb-text-muted);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--phb-primary);
+    box-shadow: var(--phb-focus-ring);
+}
+
+.form-control:disabled {
+    background-color: var(--phb-bg-subtle);
+    color: var(--phb-text-muted);
+    cursor: not-allowed;
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235A6672' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--phb-space-4) center;
+    padding-right: var(--phb-space-7);
+}
+
+/* Numeric / measurement input — monospace for alignment of quantities */
+.form-control-numeric {
+    font-family: var(--phb-font-mono);
+    text-align: right;
+}
+
+/* Input with a unit suffix (e.g. "m", "kg", "m³") */
+.input-group {
+    display: flex;
+    align-items: stretch;
+}
+.input-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group-addon {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--phb-space-4);
+    background-color: var(--phb-bg-subtle);
+    border: 1px solid var(--phb-border-color-strong);
+    border-left: none;
+    border-top-right-radius: var(--phb-radius-sm);
+    border-bottom-right-radius: var(--phb-radius-sm);
+    color: var(--phb-text-secondary);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-medium);
+    white-space: nowrap;
+}
+
+/* Checkbox / radio */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+    margin-bottom: var(--phb-space-3);
+}
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--phb-primary);
+    cursor: pointer;
+}
+.form-check label {
+    font-size: var(--phb-text-sm);
+    color: var(--phb-text-primary);
+    cursor: pointer;
+}
+
+/* Helper / error text */
+.form-hint {
+    display: block;
+    margin-top: var(--phb-space-2);
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+}
+
+.form-error {
+    display: block;
+    margin-top: var(--phb-space-2);
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-medium);
+    color: var(--phb-danger);
+}
+
+.form-control.is-invalid {
+    border-color: var(--phb-danger);
+}
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.2);
+}
+
+.form-control.is-valid {
+    border-color: var(--phb-success);
+}
+
+/* Fieldset grouping */
+.form-section {
+    padding-bottom: var(--phb-space-5);
+    margin-bottom: var(--phb-space-5);
+    border-bottom: 1px solid var(--phb-border-color);
+}
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--phb-space-4);
+}
+.form-row > .form-group {
+    flex: 1 1 200px;
+}
+
+/* On phones, paired fields stack so inputs keep a usable width */
+@media (max-width: 600px) {
+    .form-row > .form-group {
+        flex-basis: 100%;
+    }
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--phb-space-3);
+    margin-top: var(--phb-space-6);
+    padding-top: var(--phb-space-5);
+    border-top: 1px solid var(--phb-border-color);
+}

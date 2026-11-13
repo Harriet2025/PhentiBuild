@@ -1,0 +1,88 @@
+/*
+ * PhentiBuild — Full-screen split auth layout (React app)
+ *
+ * Layout-only overrides for the login and register screens:
+ *   - the card fills the whole viewport (no light-grey frame around it,
+ *     no rounded corners, no drop shadow)
+ *   - hero image on the left (logo + PhentiBuild live only there),
+ *     form on the right, side by side from tablet width up
+ *
+ * Colours and fonts are NOT changed here — every colour still comes from
+ * the original tokens / auth.css. Loaded after main.css so it wins.
+ */
+
+.auth-page--fullscreen {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0;
+    display: block;
+    /* Same dark tone as the form pane, so nothing light can show at the edges. */
+    background: #14171c;
+}
+
+.auth-page--fullscreen .auth-page-inner {
+    max-width: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+}
+
+.auth-page--fullscreen .auth-card {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* Mobile: slim hero strip on top, form fills the rest of the screen. */
+.auth-page--fullscreen .auth-form-pane {
+    flex: 1 1 auto;
+}
+
+/* The register form has more fields — give its panel more room. */
+.auth-page--fullscreen .auth-form-float--wide {
+    max-width: 560px;
+}
+
+/* Dark-theme the register-only elements that sit inside the form panel. */
+.auth-page--fullscreen .auth-form-float select.form-control {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--phb-white);
+}
+.auth-page--fullscreen .auth-form-float select.form-control option {
+    color: var(--phb-text-primary);
+}
+.auth-page--fullscreen .auth-form-float .auth-form-toolbar {
+    margin-bottom: var(--phb-space-5);
+}
+
+@media (min-width: 768px) {
+    .auth-page--fullscreen .auth-card {
+        flex-direction: row;
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+    .auth-page--fullscreen .auth-hero-pane {
+        flex: 1 1 56%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .auth-page--fullscreen .auth-form-pane {
+        flex: 1 1 44%;
+        overflow-y: auto;
+    }
+}
+
+@media (min-width: 1280px) {
+    .auth-page--fullscreen .auth-hero-content {
+        max-width: 480px;
+    }
+}

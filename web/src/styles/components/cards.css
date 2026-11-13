@@ -1,0 +1,81 @@
+/*
+ * PhentiBuild (PhB) - Cards
+ */
+
+.card {
+    background-color: var(--phb-bg-surface);
+    border: 1px solid var(--phb-border-color);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-sm);
+    overflow: hidden;
+}
+
+.card-elevated {
+    box-shadow: var(--phb-shadow-md);
+    border-color: transparent;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--phb-space-3);
+    padding: var(--phb-space-4) var(--phb-space-5);
+    border-bottom: 1px solid var(--phb-border-color);
+}
+
+.card-header h1, .card-header h2, .card-header h3,
+.card-header h4, .card-header h5 {
+    margin: 0;
+}
+
+.card-body {
+    padding: var(--phb-space-5);
+}
+
+.card-footer {
+    padding: var(--phb-space-4) var(--phb-space-5);
+    border-top: 1px solid var(--phb-border-color);
+    background-color: var(--phb-bg-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--phb-space-3);
+}
+
+/* Accent card — left border stripe, used for KPI/stat callouts */
+.card-accent {
+    border-left: 4px solid var(--phb-primary);
+}
+
+.card-accent.card-accent-success { border-left-color: var(--phb-success); }
+.card-accent.card-accent-warning { border-left-color: var(--phb-warning); }
+.card-accent.card-accent-danger  { border-left-color: var(--phb-danger); }
+.card-accent.card-accent-info    { border-left-color: var(--phb-info); }
+
+/* Stat card — compact metric display */
+.stat-card {
+    padding: var(--phb-space-5);
+}
+.stat-card .stat-label {
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--phb-text-secondary);
+    display: block;
+    margin-bottom: var(--phb-space-2);
+}
+.stat-card .stat-value {
+    font-family: var(--phb-font-mono);
+    font-size: var(--phb-text-2xl);
+    font-weight: var(--phb-fw-bold);
+    color: var(--phb-text-primary);
+    display: block;
+}
+.stat-card .stat-meta {
+    font-size: var(--phb-text-xs);
+    color: var(--phb-text-muted);
+    margin-top: var(--phb-space-2);
+    display: block;
+}

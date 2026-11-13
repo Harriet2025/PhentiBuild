@@ -1,0 +1,130 @@
+/*
+ * PhentiBuild (PhB) - Buttons
+ * Minimum 44px touch target height — designed for use with gloves and
+ * on tablets/phones on site.
+ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--phb-space-2);
+    min-height: 44px;
+    padding: var(--phb-space-3) var(--phb-space-5);
+    font-size: var(--phb-text-sm);
+    font-weight: var(--phb-fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    border-radius: var(--phb-radius-sm);
+    border: 2px solid transparent;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--phb-transition-fast),
+                border-color var(--phb-transition-fast),
+                color var(--phb-transition-fast),
+                box-shadow var(--phb-transition-fast);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--phb-focus-ring);
+}
+
+.btn:disabled,
+.btn.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* --- Variants --- */
+
+.btn-primary {
+    background-color: var(--phb-primary);
+    border-color: var(--phb-primary);
+    color: var(--phb-white);
+}
+.btn-primary:hover { background-color: var(--phb-primary-dark); border-color: var(--phb-primary-dark); }
+.btn-primary:active { background-color: var(--phb-primary-darker); border-color: var(--phb-primary-darker); }
+
+.btn-secondary {
+    background-color: var(--phb-charcoal);
+    border-color: var(--phb-charcoal);
+    color: var(--phb-white);
+}
+.btn-secondary:hover { background-color: var(--phb-charcoal-light); border-color: var(--phb-charcoal-light); }
+
+.btn-outline {
+    background-color: transparent;
+    border-color: var(--phb-primary);
+    color: var(--phb-primary);
+}
+.btn-outline:hover {
+    background-color: var(--phb-primary);
+    color: var(--phb-white);
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    border-color: var(--phb-border-color-strong);
+    color: var(--phb-text-primary);
+}
+.btn-outline-secondary:hover {
+    background-color: var(--phb-gray-100);
+    border-color: var(--phb-slate);
+}
+
+.btn-ghost {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--phb-text-primary);
+}
+.btn-ghost:hover { background-color: var(--phb-gray-100); }
+
+.btn-success { background-color: var(--phb-success); border-color: var(--phb-success); color: var(--phb-white); }
+.btn-danger  { background-color: var(--phb-danger);  border-color: var(--phb-danger);  color: var(--phb-white); }
+
+/* --- Sizes --- */
+
+.btn-sm {
+    min-height: 36px;
+    padding: var(--phb-space-2) var(--phb-space-4);
+    font-size: var(--phb-text-xs);
+}
+
+.btn-lg {
+    min-height: 52px;
+    padding: var(--phb-space-4) var(--phb-space-6);
+    font-size: var(--phb-text-base);
+}
+
+.btn-icon {
+    min-width: 44px;
+    padding: var(--phb-space-3);
+}
+
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* --- Group --- */
+
+.btn-group {
+    display: inline-flex;
+}
+.btn-group .btn {
+    border-radius: 0;
+}
+.btn-group .btn:first-child {
+    border-top-left-radius: var(--phb-radius-sm);
+    border-bottom-left-radius: var(--phb-radius-sm);
+}
+.btn-group .btn:last-child {
+    border-top-right-radius: var(--phb-radius-sm);
+    border-bottom-right-radius: var(--phb-radius-sm);
+}
+.btn-group .btn + .btn {
+    border-left-width: 1px;
+}

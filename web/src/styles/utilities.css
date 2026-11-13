@@ -1,0 +1,94 @@
+/*
+ * PhentiBuild (PhB) - Layout & Utility Classes
+ * Small reusable helpers for spacing and layout so future pages don't
+ * need inline styles or repeated one-off CSS.
+ */
+
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--phb-space-4);
+}
+
+.grid {
+    display: grid;
+    gap: var(--phb-space-5);
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-1 { gap: var(--phb-space-1); }
+.gap-2 { gap: var(--phb-space-2); }
+.gap-3 { gap: var(--phb-space-3); }
+.gap-4 { gap: var(--phb-space-4); }
+.gap-5 { gap: var(--phb-space-5); }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Margin / padding helpers, scale 1-6 map to --phb-space-1..6 */
+.m-0 { margin: 0; }
+.mt-1 { margin-top: var(--phb-space-1); } .mt-2 { margin-top: var(--phb-space-2); }
+.mt-3 { margin-top: var(--phb-space-3); } .mt-4 { margin-top: var(--phb-space-4); }
+.mt-5 { margin-top: var(--phb-space-5); } .mt-6 { margin-top: var(--phb-space-6); }
+
+.mb-1 { margin-bottom: var(--phb-space-1); } .mb-2 { margin-bottom: var(--phb-space-2); }
+.mb-3 { margin-bottom: var(--phb-space-3); } .mb-4 { margin-bottom: var(--phb-space-4); }
+.mb-5 { margin-bottom: var(--phb-space-5); } .mb-6 { margin-bottom: var(--phb-space-6); }
+
+.p-0 { padding: 0; }
+.p-3 { padding: var(--phb-space-3); }
+.p-4 { padding: var(--phb-space-4); }
+.p-5 { padding: var(--phb-space-5); }
+.p-6 { padding: var(--phb-space-6); }
+
+.w-full { width: 100%; }
+
+.rounded-sm { border-radius: var(--phb-radius-sm); }
+.rounded-md { border-radius: var(--phb-radius-md); }
+.rounded-lg { border-radius: var(--phb-radius-lg); }
+
+.shadow-sm { box-shadow: var(--phb-shadow-sm); }
+.shadow-md { box-shadow: var(--phb-shadow-md); }
+
+/* Loading spinner — a plain rotating border, no image/icon dependency.
+   <span class="spinner"></span> or <span class="spinner spinner-lg"></span> */
+.spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--phb-gray-300);
+    border-top-color: var(--phb-primary);
+    border-radius: 50%;
+    animation: phb-spin 0.7s linear infinite;
+}
+.spinner-lg {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+}
+@keyframes phb-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive visibility */
+.hide-mobile { display: none; }
+@media (min-width: 768px) {
+    .hide-mobile { display: initial; }
+    .hide-desktop { display: none; }
+}

@@ -1,0 +1,30 @@
+/*
+ * PhentiBuild (PhB) - Toast
+ * Transient confirmation shown at the bottom of the viewport.
+ */
+
+.phb-toast {
+    position: fixed;
+    left: 50%;
+    bottom: var(--phb-space-5);
+    transform: translateX(-50%);
+    max-width: calc(100vw - var(--phb-space-6));
+    background-color: var(--phb-charcoal);
+    color: var(--phb-white);
+    font-size: var(--phb-text-sm);
+    padding: var(--phb-space-3) var(--phb-space-5);
+    border-radius: var(--phb-radius-md);
+    box-shadow: var(--phb-shadow-lg);
+    z-index: var(--phb-z-toast);
+    display: flex;
+    align-items: center;
+    gap: var(--phb-space-2);
+}
+
+.phb-toast-success {
+    border-left: 4px solid var(--phb-success);
+}
+
+.phb-toast-danger {
+    border-left: 4px solid var(--phb-danger);
+}

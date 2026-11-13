@@ -1,0 +1,90 @@
+/*
+ * PhentiBuild (PhB) - Typography
+ * Base type styles. High legibility is a priority — this app is used
+ * outdoors, on-site, on phones/tablets in bright light and with gloves.
+ */
+
+body {
+    font-family: var(--phb-font-base);
+    font-size: var(--phb-text-base);
+    font-weight: var(--phb-fw-regular);
+    line-height: var(--phb-lh-normal);
+    color: var(--phb-text-primary);
+    background-color: var(--phb-bg-page);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--phb-fw-bold);
+    line-height: var(--phb-lh-tight);
+    color: var(--phb-text-primary);
+    letter-spacing: -0.01em;
+}
+
+h1 { font-size: var(--phb-text-3xl); }
+h2 { font-size: var(--phb-text-2xl); }
+h3 { font-size: var(--phb-text-xl); }
+h4 { font-size: var(--phb-text-lg); }
+h5 { font-size: var(--phb-text-md); }
+h6 {
+    font-size: var(--phb-text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--phb-text-secondary);
+}
+
+p {
+    margin: 0 0 var(--phb-space-4);
+}
+
+a {
+    color: var(--phb-primary);
+    text-decoration: none;
+    font-weight: var(--phb-fw-medium);
+}
+
+a:hover {
+    color: var(--phb-primary-dark);
+    text-decoration: underline;
+}
+
+small, .text-sm {
+    font-size: var(--phb-text-sm);
+}
+
+.text-xs { font-size: var(--phb-text-xs); }
+.text-lg { font-size: var(--phb-text-lg); }
+
+.text-muted { color: var(--phb-text-muted); }
+.text-secondary { color: var(--phb-text-secondary); }
+.text-primary-color { color: var(--phb-primary); }
+.text-inverse { color: var(--phb-text-inverse); }
+
+.text-success { color: var(--phb-success); }
+.text-warning { color: var(--phb-warning); }
+.text-danger { color: var(--phb-danger); }
+.text-info { color: var(--phb-info); }
+
+.font-mono {
+    font-family: var(--phb-font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.font-medium { font-weight: var(--phb-fw-medium); }
+.font-semibold { font-weight: var(--phb-fw-semibold); }
+.font-bold { font-weight: var(--phb-fw-bold); }
+
+.text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Eyebrow / section label — technical, industrial feel */
+.eyebrow {
+    display: inline-block;
+    font-size: var(--phb-text-xs);
+    font-weight: var(--phb-fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--phb-primary);
+    margin-bottom: var(--phb-space-2);
+}
