@@ -6,3 +6,8 @@ bcrypt==5.0.0
 openpyxl==3.1.5
 python-dotenv==1.2.4
 gunicorn==23.0.0
+# Verifies "Sign in with Google" tokens (Google's official library + its HTTP transport).
+google-auth==2.40.3
+requests==2.32.4
+# Camera Scanner measuring: Anthropic's official SDK (Claude vision).
+anthropic==2.8.0

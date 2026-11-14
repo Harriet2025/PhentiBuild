@@ -32,6 +32,9 @@ export const endpoints = {
     register: single('auth/register.php', 'auth/register/'),
     logout: single('auth/logout.php', 'auth/logout/'),
     me: single('auth/me.php', 'auth/me/'),
+    // Django only (the classic PHP API has no Google sign-in).
+    providers: single('auth/providers.php', 'auth/providers/'),
+    google: single('auth/google.php', 'auth/google/'),
   },
   account: {
     profile: single('account/profile.php', 'account/profile/'),

@@ -125,12 +125,59 @@ setup avoids that problem and needs no CORS.
 
 ---
 
+## Part B2 — "Sign in with Google" (optional)
+
+The Google button appears on the login and sign-up pages only once the
+server has a Google Client ID. It's free:
+
+1. Go to <https://console.cloud.google.com/> → create (or pick) a project.
+2. **APIs & Services → OAuth consent screen**: choose **External**, fill in
+   the app name (PhentiBuild), your support email and logo, then publish.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**
+   - Application type: **Web application**
+   - **Authorized JavaScript origins**: add every address people open the
+     app on, e.g. `http://localhost:5173` (local), `https://<your-app>.vercel.app`
+     and your custom domain. (No redirect URIs are needed.)
+4. Copy the **Client ID** (ends in `.apps.googleusercontent.com`; it is
+   public, not a secret) and set it as `GOOGLE_CLIENT_ID`:
+   - locally: in `server/.env`, then restart `runserver`;
+   - Coolify: in the api service's environment variables, then redeploy.
+
+How accounts work with Google:
+- A Google email that already has an account signs straight into it.
+- A new Google email is asked for phone + profession once, then lands on
+  the dashboard as a **Member** (never Admin: that stays `create_admin`).
+- Google-only accounts have no password; they can set one in
+  Settings → Account if they also want email + password login.
+
+## Part B3 — Camera Scanner measuring (optional)
+
+The scanner measures timber and walls from a photo with Claude vision
+(Anthropic), using a reference object of known size in the shot (the
+printable card at `/reference-card.html`, any bank/ID card, or A4 paper).
+
+1. Create an API key at <https://console.anthropic.com/> (Settings → API keys)
+   and add billing. Each scan is one request to `claude-opus-5-5`; the cost is
+   shown in the Console's usage page.
+2. Set `ANTHROPIC_API_KEY` — locally in `server/.env` (restart `runserver`),
+   on Coolify in the api service's environment variables. It is a **secret**:
+   it stays on the server, never in the frontend, Vercel, or Git.
+3. Optional: `VISION_THROTTLE_RATE` (default `30/hour` per user) caps cost.
+
+Without the key the scanner still works with manual entry and says so.
+Photos are sent to Anthropic for analysis and are not stored by PhentiBuild.
+Every measured value is shown to the person to check and correct before it
+is saved, and saved records note whether values came from a photo.
+
 ## Part C — Smoke test after every deploy
 
 | Check | Expected |
 |---|---|
 | `https://<api>/api/ping/` | `"database":"connected"` |
 | Vercel URL → log in with an existing account | dashboard shows your real counts |
+| Create a new account | lands on the dashboard, already logged in |
+| (If the scanner key is set) Scanner → upload a photo with a bank card on a timber | object + length filled in for you to check |
+| (If Google is set up) Continue with Google | signs in, or asks phone + profession once, then dashboard |
 | Register a new account | account shows its profession (e.g. "Contractor") and access "Member" — never Admin |
 | Reports → Excel export | `.xlsx` downloads |
 | Log out → refresh | back on login |

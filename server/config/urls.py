@@ -40,6 +40,8 @@ urlpatterns = [
     path('api/auth/register/', accounts.RegisterView.as_view()),
     path('api/auth/logout/', accounts.LogoutView.as_view()),
     path('api/auth/me/', accounts.MeView.as_view()),
+    path('api/auth/providers/', accounts.AuthProvidersView.as_view()),
+    path('api/auth/google/', accounts.GoogleAuthView.as_view()),
     path('api/account/profile/', accounts.ProfileView.as_view()),
     path('api/account/password/', accounts.PasswordView.as_view()),
     path('api/users/', accounts.UserListView.as_view()),

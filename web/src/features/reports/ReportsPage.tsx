@@ -115,20 +115,20 @@ export function ReportsPage() {
         {!recent.loading && recent.rows.length > 0 && (
           <div className="card reports-table-wrap">
             <div className="table-responsive">
-              <table className="table">
+              <table className="table table-stack">
                 <thead>
-                  <tr><th>Generated</th><th>Title</th><th>Project</th>{admin && <th>Owner</th>}<th className="text-right">Actions</th></tr>
+                  <tr><th>Title</th><th>Generated</th><th>Project</th>{admin && <th>Owner</th>}<th className="text-right">Actions</th></tr>
                 </thead>
                 <tbody>
                   {recent.rows.map((r) => {
                     const project = r.project_id ? projectsById.get(r.project_id) : undefined
                     return (
                       <tr key={r.id}>
-                        <td className="text-sm">{formatDate(r.created_at)}</td>
-                        <td>{r.title}</td>
-                        <td>{project ? `${project.ref} — ${project.name}` : <span className="text-muted">General</span>}</td>
-                        {admin && <td className="text-sm">{r.ownerName ?? <span className="text-muted">No owner</span>}</td>}
-                        <td className="text-right">
+                        <td className="stack-title">{r.title}</td>
+                        <td data-label="Generated" className="text-sm">{formatDate(r.created_at)}</td>
+                        <td data-label="Project">{project ? `${project.ref} — ${project.name}` : <span className="text-muted">General</span>}</td>
+                        {admin && <td data-label="Owner" className="text-sm">{r.ownerName ?? <span className="text-muted">No owner</span>}</td>}
+                        <td className="text-right stack-actions">
                           <button type="button" className="btn btn-outline-secondary btn-sm" disabled={busy !== null}
                             onClick={() => void exportExcel(r.project_id, r.id)}>
                             {busy === r.id ? 'Generating…' : 'Regenerate'}

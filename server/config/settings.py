@@ -120,6 +120,10 @@ SESSION_COOKIE_SECURE = env_bool('SESSION_COOKIE_SECURE', not DEBUG)
 SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # used only for "remember me"
 REMEMBER_ME_SECONDS = 30 * 24 * 60 * 60
 
+# "Sign in with Google": the OAuth Client ID from Google Cloud Console
+# (it is public, not a secret). Empty = Google sign-in switched off.
+GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID', '') or ''
+
 # CSRF: the token cookie is readable by JS on purpose (the React app copies
 # it into the X-CSRFToken header); the SESSION cookie stays HttpOnly.
 CSRF_COOKIE_NAME = 'phb_csrftoken'
@@ -151,6 +155,8 @@ REST_FRAMEWORK = {
         'login': env('LOGIN_THROTTLE_RATE', '10/min'),
         'register': env('REGISTER_THROTTLE_RATE', '20/hour'),
         'contact': env('CONTACT_THROTTLE_RATE', '10/hour'),
+        # Each scanner analysis is a paid AI call - cap it per user.
+        'vision': env('VISION_THROTTLE_RATE', '30/hour'),
     },
     'UNAUTHENTICATED_USER': 'django.contrib.auth.models.AnonymousUser',
 }
@@ -164,6 +170,12 @@ LANGUAGE_CODE = 'en-gb'
 USE_I18N = False
 
 # ------------------------------------------------------- Integrations
+# Camera Scanner measuring (apps/vision/service.py). The key is read ONLY
+# on the server and never sent to the browser. Empty = scanner falls back
+# to manual entry and says so.
+ANTHROPIC_API_KEY = env('ANTHROPIC_API_KEY', '') or ''
+VISION_MODEL = env('VISION_MODEL', 'claude-opus-5-5') or 'claude-opus-5-5'
+
 ROOF_AI_API_URL = env('ROOF_AI_API_URL', '') or ''
 ROOF_AI_API_KEY = env('ROOF_AI_API_KEY', '') or ''
 ROOF_AI_MODEL = env('ROOF_AI_MODEL', 'gpt-4o-mini') or 'gpt-4o-mini'

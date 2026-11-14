@@ -217,6 +217,7 @@ Changes made on purpose during the migration:
 | Data ownership: members see only their own projects, BOQ, measurements, calculations, reports, roof design and history; Admins see everyone's. Materials are shared, only Admins edit them | ✅ done (`apps/core/ownership.py`) |
 | Project links: BOQ items, measurements and calculations can belong to a project ("Save to project" picker in Calculators, Manual Input and Scanner; project filter and column on the BOQ page). The project page tabs show its measurements, calculations, BOQ (with Excel export), reports and history. A project export contains only that project's BOQ. Deleting a project unlinks its records and never deletes them. Admins see an Owner column on BOQ, Reports and Projects | ✅ done |
 | Roof designs per project: Roof Studio's "Roof design for" picker switches between your own design and each project's design (one per project). The project page's Roof Design tab shows a summary. Deleting a project keeps its design | ✅ done |
+| Camera Scanner measuring: Claude vision (`claude-opus-5-5`) + reference object (card / A4), checked by the person before saving; server-side image checks, plausibility limits, per-user rate limit; manual fallback when no key (`server/apps/vision/service.py`) | ✅ done (needs `ANTHROPIC_API_KEY`) |
 | Notifications, topbar search | ❌ not built yet |
 
 ## 5. Running everything locally

@@ -27,6 +27,14 @@ def _statements(sql: str) -> list[str]:
 
 
 class LegacySchemaTestRunner(DiscoverRunner):
+    def setup_test_environment(self, **kwargs):
+        super().setup_test_environment(**kwargs)
+        # Tests must NEVER call paid / external services, even when the
+        # developer's .env has real keys: switch them off; tests that need
+        # them turn them on with a fake client.
+        settings.ANTHROPIC_API_KEY = ''
+        settings.GOOGLE_CLIENT_ID = ''
+
     def setup_databases(self, **kwargs):
         config = super().setup_databases(**kwargs)
         sql = SCHEMA_FILE.read_text(encoding='utf-8')

@@ -1,0 +1,48 @@
+/* "Sign up / Continue with Google" — layout only; the button itself is
+   drawn by Google and the colours come from the existing tokens. */
+.google-signin {
+  margin-top: var(--phb-space-4);
+}
+
+.google-signin-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--phb-space-3);
+  margin-bottom: var(--phb-space-4);
+  color: var(--phb-text-muted);
+  font-size: var(--phb-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.google-signin-divider::before,
+.google-signin-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--phb-border-color);
+}
+
+.google-signin-button {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Google wraps its iframe in full-width <div>s and leaves the iframe
+   left-aligned inside them (very visible with the narrower personalised
+   "Sign in as …" button). Centre every wrapper level. */
+.google-signin-button > div,
+.google-signin-button > div > div {
+  width: fit-content !important;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.google-signin-status {
+  margin-top: var(--phb-space-2);
+  text-align: center;
+}

@@ -56,9 +56,13 @@ def verify_password(raw: str, stored: str | None) -> bool:
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email: str, password: str, **extra) -> 'User':
+    def create_user(self, email: str, password: str | None, **extra) -> 'User':
+        """password=None creates an account that can only sign in with Google."""
         user = self.model(email=email.lower(), **extra)
-        user.set_password(password)
+        if password is None:
+            user.set_unusable_password()
+        else:
+            user.set_password(password)
         user.save(using=self._db)
         user.refresh_from_db()
         return user
@@ -126,6 +130,8 @@ class User(AbstractBaseUser):
             'phone': self.phone,
             'role': self.access_level,
             'profession': self.profession,
+            # False for Google-only accounts: Settings then offers "set a password".
+            'hasPassword': self.has_usable_password(),
             'created_at': fmt_datetime(self.created_at),
             'updated_at': fmt_datetime(self.updated_at),
         }

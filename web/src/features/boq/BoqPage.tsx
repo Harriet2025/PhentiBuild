@@ -342,12 +342,12 @@ export function BoqPage() {
         <>
           <div className="card boq-table-wrap">
             <div className="table-responsive">
-              <table className="table boq-table">
+              <table className="table boq-table table-stack">
                 <thead>
                   <tr>
-                    <th>Item</th><th>Project</th>{admin && <th>Owner</th>}<th>Category</th><th>Description</th><th>Specification</th><th>Unit</th>
+                    <th>Item</th><th>Project</th>{admin && <th>Owner</th>}<th>Category</th><th className="col-desc">Description</th><th className="col-spec">Specification</th><th>Unit</th>
                     <th className="text-right">Quantity</th><th className="text-right">Waste %</th><th className="text-right">Adjusted Qty</th>
-                    <th className="text-right">Unit Price</th><th className="text-right">Total</th><th>Notes</th><th className="text-right">Actions</th>
+                    <th className="text-right">Unit Price</th><th className="text-right">Total</th><th className="col-notes">Notes</th><th className="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -356,22 +356,22 @@ export function BoqPage() {
                       <tr className="boq-group-row"><td colSpan={12 + extraCols}>{cat}</td></tr>
                       {rows.map((m) => (
                         <tr key={m.id}>
-                          <td className="font-medium">{m.item}<span className="boq-item-id">{m.id}</span></td>
-                          <td>{projectCell(m)}</td>
-                          {admin && <td>{m.ownerName ?? <span className="text-muted">No owner</span>}</td>}
-                          <td><span className={`badge ${CATEGORY_BADGE[m.category] || 'badge-neutral'}`}>{m.category}</span></td>
-                          <td>{cellText(m.description)}</td>
-                          <td>{cellText(m.specification)}</td>
-                          <td>{m.unit}</td>
-                          <td className="text-right">{cellInput(m, 'quantity')}</td>
-                          <td className="text-right">{cellInput(m, 'wastePercent')}</td>
-                          <td className="text-right cell-numeric">{formatQty(adjusted(num(value(m, 'quantity')), num(value(m, 'wastePercent'))))}</td>
-                          <td className="text-right">
+                          <td className="font-medium stack-title">{m.item}<span className="boq-item-id">{m.id}</span></td>
+                          <td data-label="Project">{projectCell(m)}</td>
+                          {admin && <td data-label="Owner">{m.ownerName ?? <span className="text-muted">No owner</span>}</td>}
+                          <td data-label="Category"><span className={`badge ${CATEGORY_BADGE[m.category] || 'badge-neutral'}`}>{m.category}</span></td>
+                          <td data-label="Description" className="col-desc">{cellText(m.description)}</td>
+                          <td data-label="Specification" className="col-spec">{cellText(m.specification)}</td>
+                          <td data-label="Unit">{m.unit}</td>
+                          <td data-label="Quantity" className="text-right">{cellInput(m, 'quantity')}</td>
+                          <td data-label="Waste %" className="text-right">{cellInput(m, 'wastePercent')}</td>
+                          <td data-label="Adjusted Qty" className="text-right cell-numeric">{formatQty(adjusted(num(value(m, 'quantity')), num(value(m, 'wastePercent'))))}</td>
+                          <td data-label="Unit Price" className="text-right">
                             <div className="boq-price-input-group"><span className="boq-price-prefix">GH₵</span>{cellInput(m, 'unitPrice')}</div>
                           </td>
-                          <td className="text-right cell-numeric font-semibold">{formatCurrency(lineTotal(m))}</td>
-                          <td>{cellText(m.notes)}</td>
-                          <td>
+                          <td data-label="Total" className="text-right cell-numeric font-semibold">{formatCurrency(lineTotal(m))}</td>
+                          <td data-label="Notes" className="col-notes">{cellText(m.notes)}</td>
+                          <td className="stack-actions">
                             <div className="row-actions">
                               <button className="icon-action" onClick={() => openForm(m)} aria-label={`Edit ${m.item}`} title="Edit">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M4 20l4.5-1L19 8.5a2 2 0 0 0 0-2.8l-.7-.7a2 2 0 0 0-2.8 0L5 15.5 4 20z" /></svg>
@@ -384,9 +384,10 @@ export function BoqPage() {
                         </tr>
                       ))}
                       <tr className="boq-subtotal-row">
-                        <td colSpan={9 + extraCols}>Subtotal — {cat}</td>
+                        <td colSpan={2 + extraCols} className="boq-subtotal-label">Subtotal — {cat}</td>
+                        <td className="col-desc" /><td className="col-spec" /><td colSpan={5} />
                         <td className="text-right cell-numeric">{formatCurrency(rows.reduce((s, m) => s + lineTotal(m), 0))}</td>
-                        <td colSpan={2} />
+                        <td className="col-notes" /><td />
                       </tr>
                     </Fragment>
                   ))}

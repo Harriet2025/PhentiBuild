@@ -30,6 +30,9 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
       TIME_ZONE: ${TIME_ZONE:-Africa/Accra}
       TZ: ${TIME_ZONE:-Africa/Accra}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      VISION_MODEL: ${VISION_MODEL:-claude-opus-5-5}
       ROOF_AI_API_URL: ${ROOF_AI_API_URL:-}
       ROOF_AI_API_KEY: ${ROOF_AI_API_KEY:-}
       ROOF_AI_MODEL: ${ROOF_AI_MODEL:-}

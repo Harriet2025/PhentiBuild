@@ -1,57 +1,76 @@
 """
-POST /api/scanner/detect/ — port of api/scanner/detect.php + VisionService.php.
+/api/scanner/detect/ — Camera Scanner analysis (port of api/scanner/detect.php,
+now backed by real measuring in apps/vision/service.py).
 
-Honest by design: no computer-vision model is integrated yet, so the
-service always answers status='not_configured' and never invents a
-detection. Swapping in a real model later only changes vision_service().
+GET  -> is automatic measuring switched on? + object types + reference objects
+POST {"image": <base64>, "mimeType": "image/jpeg", "reference": "card|a4|none"}
+     -> the analysis result, which the person always checks before saving.
+
+Honest by design: with no ANTHROPIC_API_KEY the answer is status
+'not_configured' and nothing is invented.
 """
 from __future__ import annotations
 
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from apps.core.responses import ApiError, success, validation_failed
 from apps.core.utils import json_input
 from apps.core.validator import Validator
 
+from . import service
+
 MAX_IMAGE_CHARS = 8 * 1024 * 1024
-
-PLANNED_OBJECT_TYPES = [
-    {'id': 'timber_2x2', 'category': 'timber', 'label': '2 × 2 Timber'},
-    {'id': 'timber_2x3', 'category': 'timber', 'label': '2 × 3 Timber'},
-    {'id': 'timber_2x4', 'category': 'timber', 'label': '2 × 4 Timber'},
-    {'id': 'timber_2x6', 'category': 'timber', 'label': '2 × 6 Timber'},
-    {'id': 'timber_4x4', 'category': 'timber', 'label': '4 × 4 Timber'},
-    {'id': 'exposed_wall', 'category': 'wall', 'label': 'Exposed Wall (length, height, surface area)'},
-]
+PLANNED_OBJECT_TYPES = service.OBJECT_TYPES  # name kept for the API's meta key
+REFERENCE_OPTIONS = [{'id': k, 'label': v['label'], 'size': v['size']} for k, v in service.REFERENCES.items()]
 
 
-class UnavailableVisionService:
-    def detect(self, image_base64: str, mime_type: str) -> dict:
-        return {
-            'status': 'not_configured',
-            'objectType': None,
-            'label': None,
-            'measurements': [],
-            'confidence': None,
-            'message': 'Computer vision detection is not connected yet. No model has been integrated, so nothing '
-                       'was auto-detected — enter the object type and measurements manually below.',
-        }
+def _meta() -> dict:
+    return {'plannedObjectTypes': PLANNED_OBJECT_TYPES, 'references': REFERENCE_OPTIONS}
 
 
-def vision_service():
-    return UnavailableVisionService()
+class VisionThrottle(ScopedRateThrottle):
+    """Throttle only the paid analysis (POST), never the status check."""
+
+    def allow_request(self, request, view):
+        if request.method != 'POST' or not service.is_configured():
+            return True
+        return super().allow_request(request, view)
 
 
 class DetectView(APIView):
+    throttle_classes = [VisionThrottle]
+    throttle_scope = 'vision'
+
+    def get(self, request):
+        return success({'configured': service.is_configured()}, **_meta())
+
     def post(self, request):
         data = json_input(request)
         v = Validator(data)
         v.required('image', 'Image')
         v.optional('mimeType')
+        v.optional('reference').in_('reference', list(service.REFERENCES), 'Reference')
         if v.fails():
             raise validation_failed(v.errors())
-        image = str(data['image'])
+        image = data['image']
+        if not isinstance(image, str):
+            raise validation_failed({'image': 'The captured image could not be read.'})
         if len(image) > MAX_IMAGE_CHARS:
             raise ApiError('Captured image is too large.', 413)
-        result = vision_service().detect(image, str(data.get('mimeType') or 'image/jpeg'))
-        return success(result, plannedObjectTypes=PLANNED_OBJECT_TYPES)
+
+        if not service.is_configured():
+            return success(dict(service.NOT_CONFIGURED), **_meta())
+
+        try:
+            photo = service.validate_photo(image, str(data.get('mimeType') or 'image/jpeg'))
+        except service.InvalidImage as exc:
+            if str(exc) == 'too_large':
+                raise ApiError('Captured image is too large.', 413)
+            raise validation_failed({'image': str(exc)})
+
+        try:
+            result = service.analyse(photo, str(data.get('reference') or 'card'))
+        except service.VisionUnavailable as exc:
+            raise ApiError(str(exc), 503)
+        return success(result, **_meta())

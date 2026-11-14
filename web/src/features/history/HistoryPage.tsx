@@ -112,7 +112,7 @@ export function HistoryPage() {
       {state.status === 'ready' && rows.length > 0 && (
         <div className="card history-table-wrap">
           <div className="table-responsive">
-            <table className="table">
+            <table className="table table-stack">
               <thead>
                 <tr><th>Date</th><th>Time</th><th>User</th><th>Module</th><th>Project</th><th>Action</th><th>Details</th></tr>
               </thead>
@@ -121,9 +121,9 @@ export function HistoryPage() {
                   const when = parseDate(row.created_at)
                   return (
                     <tr key={row.id}>
-                      <td className="text-sm">{when ? when.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : row.created_at}</td>
-                      <td className="text-sm text-muted">{when ? when.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : ''}</td>
-                      <td>
+                      <td data-label="Date" className="text-sm">{when ? when.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : row.created_at}</td>
+                      <td data-label="Time" className="text-sm text-muted">{when ? when.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : ''}</td>
+                      <td data-label="User">
                         {row.user_id && row.user_name ? (
                           <div className="history-user-cell">
                             <span className="history-user-avatar">{initials(row.user_name)}</span>
@@ -131,8 +131,8 @@ export function HistoryPage() {
                           </div>
                         ) : <span className="text-muted">System</span>}
                       </td>
-                      <td><span className="badge badge-neutral">{row.module || row.entity_type}</span></td>
-                      <td>
+                      <td data-label="Module"><span className="badge badge-neutral">{row.module || row.entity_type}</span></td>
+                      <td data-label="Project">
                         {row.project_id && row.project_ref ? (
                           <div className="history-project-cell">
                             <span className="history-project-ref">{row.project_ref}</span>
@@ -140,8 +140,8 @@ export function HistoryPage() {
                           </div>
                         ) : <span className="text-muted">—</span>}
                       </td>
-                      <td><span className={`badge ${ACTION_BADGE[row.action] || 'badge-neutral'}`}>{capitalize(row.action)}</span></td>
-                      <td className="text-sm">{row.summary}</td>
+                      <td data-label="Action"><span className={`badge ${ACTION_BADGE[row.action] || 'badge-neutral'}`}>{capitalize(row.action)}</span></td>
+                      <td data-label="Details" className="text-sm stack-wide">{row.summary}</td>
                     </tr>
                   )
                 })}

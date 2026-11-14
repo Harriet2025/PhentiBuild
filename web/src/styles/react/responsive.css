@@ -1,0 +1,410 @@
+/*
+ * PhentiBuild — responsive layer (React app)
+ *
+ * Phones (≤ 640px), tablets / iPad portrait (641–1023px), iPad landscape
+ * and small laptops (1024–1279px), desktops (≥ 1280px).
+ *
+ * LAYOUT ONLY: every colour and font still comes from the original tokens
+ * (variables.css). Loaded last, so these rules refine the original CSS
+ * without editing it.
+ */
+
+/* =====================================================================
+   1. TABLES → CARDS ON PHONES (.table-stack)
+   Each row becomes a card; each cell shows its column name (data-label)
+   on the left and the value on the right. Used by BOQ, History, Reports
+   and the project page tabs.
+   ===================================================================== */
+@media (max-width: 640px) {
+    .table-responsive:has(> .table-stack) {
+        overflow: visible;
+    }
+    .table.table-stack,
+    .boq-table-wrap .boq-table.table-stack {
+        min-width: 0;
+        display: block;
+    }
+    .table-stack thead {
+        display: none;
+    }
+    .table-stack tbody,
+    .table-stack tr {
+        display: block;
+    }
+    .table-stack tbody tr {
+        padding: var(--phb-space-3) var(--phb-space-4);
+        border-bottom: 1px solid var(--phb-border-color);
+    }
+    .table-stack tbody tr:last-child {
+        border-bottom: none;
+    }
+    .table-stack tbody tr:hover {
+        background-color: transparent;
+    }
+    .table-stack tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--phb-space-4);
+        padding: var(--phb-space-1) 0;
+        border-bottom: none;
+        text-align: right;
+        min-height: 32px;
+    }
+    .table-stack tbody td[data-label]::before {
+        content: attr(data-label);
+        flex: 0 0 auto;
+        max-width: 45%;
+        text-align: left;
+        font-size: var(--phb-text-xs);
+        font-weight: var(--phb-fw-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--phb-text-muted);
+    }
+    /* Long text (details, values): label on its own line, text below. */
+    .table-stack tbody td.stack-wide {
+        display: block;
+        text-align: left;
+    }
+    .table-stack tbody td.stack-wide::before {
+        display: block;
+        max-width: none;
+        margin-bottom: 2px;
+    }
+    /* The row's name, shown as the card title. */
+    .table-stack tbody td.stack-title {
+        display: block;
+        text-align: left;
+        font-weight: var(--phb-fw-semibold);
+        padding-bottom: var(--phb-space-2);
+    }
+    .table-stack tbody td.stack-actions {
+        justify-content: flex-end;
+        padding-top: var(--phb-space-2);
+    }
+    .table-stack .boq-cell-wrap {
+        max-width: none;
+        text-align: right;
+    }
+    .table-stack .boq-cell-input {
+        width: 110px;
+    }
+
+    /* BOQ: category bar + subtotal line */
+    .table-stack tbody tr.boq-group-row {
+        padding: 0;
+        border-bottom: none;
+    }
+    .table-stack tbody tr.boq-group-row td {
+        display: block;
+        text-align: left;
+        padding: var(--phb-space-2) var(--phb-space-4);
+    }
+    .table-stack tbody tr.boq-subtotal-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--phb-bg-subtle);
+        border-bottom: 2px solid var(--phb-border-color-strong);
+    }
+    .table-stack tbody tr.boq-subtotal-row td {
+        display: block;
+        min-height: 0;
+        padding: 0;
+        background: none;
+        border: none;
+    }
+    .table-stack tbody tr.boq-subtotal-row td:empty {
+        display: none;
+    }
+}
+
+/* =====================================================================
+   2. BILL OF QUANTITIES
+   ===================================================================== */
+/* The category bar's text was dark-on-dark (a generic table rule won). */
+.boq-table tbody tr.boq-group-row td {
+    color: var(--phb-white);
+}
+/* Alignment by the cells' own classes, not by column position (Project /
+   Owner columns move the positions). Numbers stay right-aligned. */
+.boq-table th,
+.boq-table td {
+    text-align: left;
+}
+.boq-table th.text-right,
+.boq-table td.text-right {
+    text-align: right;
+}
+.boq-subtotal-label {
+    white-space: nowrap;
+}
+/* Fewer columns on narrower screens, so Unit Price, Total and the edit /
+   delete buttons are visible without scrolling sideways. Everything
+   hidden here is still in the item's edit form. */
+@media (max-width: 1439px) {
+    .boq-table .col-desc,
+    .boq-table .col-spec,
+    .boq-table .col-notes {
+        display: none;
+    }
+    .boq-table-wrap .boq-table {
+        min-width: 860px;
+    }
+}
+/* Mid-size screens: tighter cells and narrower number boxes, so the whole
+   table (up to Total and the buttons) fits on a 1366px laptop. */
+@media (min-width: 641px) and (max-width: 1439px) {
+    .boq-table thead th,
+    .boq-table tbody td {
+        padding-left: var(--phb-space-2);
+        padding-right: var(--phb-space-2);
+    }
+    .boq-table thead th:first-child,
+    .boq-table tbody td:first-child {
+        padding-left: var(--phb-space-4);
+    }
+    .boq-table .boq-cell-input {
+        width: 72px;
+    }
+    .boq-table td[data-label="Waste %"] .boq-cell-input {
+        width: 56px;
+    }
+}
+/* Item names on one or two lines, not four. */
+.boq-table td.stack-title {
+    min-width: 190px;
+}
+/* Tablets / iPad: the table can scroll sideways, so the item name stays
+   pinned on the left and you always know which row a price belongs to. */
+@media (min-width: 641px) and (max-width: 1439px) {
+    .boq-table thead th:first-child,
+    .boq-table tbody td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+    }
+    .boq-table thead th:first-child {
+        background-color: var(--phb-charcoal);
+    }
+    .boq-table tbody td:first-child {
+        background-color: var(--phb-bg-surface);
+        box-shadow: 1px 0 0 var(--phb-border-color);
+    }
+    .boq-table tbody tr.boq-subtotal-row td:first-child {
+        background-color: var(--phb-bg-subtle);
+    }
+    .boq-table tbody tr.boq-group-row td:first-child {
+        background-color: var(--phb-charcoal);
+        box-shadow: none;
+    }
+}
+/* Money and quantities never break across lines ("GH₵" / "11,970.00"). */
+.boq-table td.cell-numeric {
+    white-space: nowrap;
+}
+/* The pinned item cell follows the row's hover highlight. */
+.boq-table tbody tr:hover td:first-child {
+    background-color: var(--phb-primary-light);
+}
+.boq-table tbody tr.boq-subtotal-row:hover td:first-child {
+    background-color: var(--phb-bg-subtle);
+}
+.boq-table tbody tr.boq-group-row:hover td:first-child {
+    background-color: var(--phb-charcoal);
+}
+/* Totals card: amounts never break across lines. */
+.boq-summary-value {
+    white-space: nowrap;
+}
+@media (max-width: 640px) {
+    .boq-summary-row {
+        gap: var(--phb-space-3);
+    }
+    .boq-summary-label {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .boq-summary-grand .boq-summary-value {
+        font-size: var(--phb-text-lg);
+    }
+}
+
+/* =====================================================================
+   3. LOGIN / SIGN-UP ON PHONES
+   ===================================================================== */
+@media (max-width: 767px) {
+    /* The logo already says "PhentiBuild" — don't repeat it in big type. */
+    .auth-page--fullscreen .auth-hero-title {
+        display: none;
+    }
+    .auth-page--fullscreen .auth-hero-brand {
+        margin-bottom: 0;
+    }
+    .auth-page--fullscreen .auth-form-pane {
+        padding: var(--phb-space-4) var(--phb-space-3);
+    }
+}
+/* Breathing room between the heading and the first field (all sizes). */
+.auth-page--fullscreen .auth-form-heading {
+    margin-bottom: var(--phb-space-5);
+}
+
+/* =====================================================================
+   4. APP SHELL (top bar)
+   ===================================================================== */
+/* The search box isn't wired up yet; on tablets it was a tiny box that
+   squeezed everything else. Show it only where there's real room. */
+@media (max-width: 1279px) {
+    .shell-topbar-search {
+        display: none !important;
+    }
+}
+/* Tablet: capture buttons become icons, so the page title fits. */
+@media (max-width: 1099px) {
+    .shell-mode-btn-label {
+        display: none;
+    }
+}
+.shell-user-meta {
+    min-width: 0;
+    max-width: 180px;
+}
+.shell-user-name,
+.shell-user-role {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =====================================================================
+   5. DASHBOARD
+   ===================================================================== */
+/* Stat cards: 2 per row until there's real room for 4. */
+@media (max-width: 1279px) {
+    .dash-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (min-width: 1280px) {
+    .dash-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+.dash-stat-label {
+    overflow-wrap: break-word;
+}
+/* Small phones: icon above the text, so long labels
+   ("Measurements recorded") fit without being cut off. */
+@media (max-width: 480px) {
+    .dash-stat-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--phb-space-2);
+        padding: var(--phb-space-3) var(--phb-space-4);
+    }
+    .dash-stat-icon {
+        width: 36px;
+        height: 36px;
+    }
+    .dash-stat-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .dash-stat-label {
+        letter-spacing: 0.02em;
+    }
+}
+
+/* =====================================================================
+   6. PROJECT PAGE
+   ===================================================================== */
+/* All eight tabs visible: they wrap onto a second line instead of
+   hiding off-screen. */
+@media (max-width: 1023px) {
+    .detail-tab-panels {
+        margin-top: var(--phb-space-2);
+    }
+    .tabs {
+        flex-wrap: wrap;
+        column-gap: var(--phb-space-4);
+        row-gap: 0;
+        overflow-x: visible;
+    }
+}
+/* Summary tiles two-by-two on phones instead of one long column. */
+@media (max-width: 639px) {
+    .detail-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--phb-space-3);
+    }
+    .detail-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* =====================================================================
+   7. REPORTS
+   ===================================================================== */
+@media (max-width: 767px) {
+    /* In a column, "flex-basis: 320px" became a 320px-tall empty gap. */
+    .reports-export-main {
+        flex: 0 0 auto;
+        min-width: 0;
+        width: 100%;
+    }
+    .reports-export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =====================================================================
+   8. MODULE HEADERS + ROOF STUDIO
+   ===================================================================== */
+@media (max-width: 640px) {
+    .module-header > .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .rs-header-actions {
+        width: 100%;
+    }
+    .rs-header-actions .project-picker {
+        flex: 1 1 100%;
+    }
+    .rs-header-actions .btn {
+        flex: 1 1 0;
+        justify-content: center;
+    }
+}
+
+/* Never let the whole page scroll sideways on a phone. */
+@media (max-width: 640px) {
+    .shell-content,
+    .shell-main {
+        min-width: 0;
+        overflow-x: clip;
+    }
+}
+
+/* =====================================================================
+   9. CAMERA SCANNER
+   ===================================================================== */
+.scanner-badge-spinner {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+    margin-right: 6px;
+    vertical-align: -2px;
+}
+.scanner-reference {
+    margin: var(--phb-space-3) 0;
+}
+@media (max-width: 640px) {
+    .scanner-camera-actions .btn {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+}

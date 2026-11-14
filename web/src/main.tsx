@@ -6,6 +6,8 @@ import { HashRouter } from 'react-router-dom'
 import './styles/main.css'
 // React-app layout refinements (layout only — colours/fonts untouched).
 import './styles/react/auth-fullscreen.css'
+// Phone / tablet / iPad refinements (layout only) — must stay last.
+import './styles/react/responsive.css'
 import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext'
 import { ConfirmProvider } from './components/ConfirmDialog'

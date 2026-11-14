@@ -119,24 +119,35 @@ function ProfileForm() {
 
 function PasswordForm() {
   const { state, submit } = useServerForm()
+  const { user, refresh } = useAuth()
+  // Accounts created with Google have no password yet: they SET one (no "current password").
+  const settingFirst = user?.hasPassword === false
   const empty = { currentPassword: '', newPassword: '', confirmNewPassword: '' }
   const [v, setV] = useState(empty)
+  const doneText = settingFirst ? 'Password set. You can now also log in with your email and password.' : 'Password changed.'
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
-    const ok = await submit(() => accountApi.changePassword(v), 'Password changed.')
-    if (ok) setV(empty)
+    const ok = await submit(() => accountApi.changePassword(v), doneText)
+    if (ok) {
+      setV(empty)
+      if (settingFirst) void refresh() // hasPassword is now true -> normal "change password" form
+    }
   }
 
   return (
     <form noValidate className="card settings-card" onSubmit={onSubmit}>
-      <div className="card-header"><h4>Change Password</h4></div>
+      <div className="card-header"><h4>{settingFirst ? 'Set a Password' : 'Change Password'}</h4></div>
       <div className="card-body">
-        <Alerts state={state} successText="Password changed." />
-        <Field id="set-current-password" label="Current Password" required error={state.errors.currentPassword}>
-          <input type="password" id="set-current-password" className={cls(state.errors.currentPassword)} autoComplete="current-password"
-            value={v.currentPassword} onChange={(e) => setV({ ...v, currentPassword: e.target.value })} />
-        </Field>
+        <Alerts state={state} successText={doneText} />
+        {settingFirst ? (
+          <p className="text-secondary">You signed up with Google. Set a password if you also want to log in with your email and password.</p>
+        ) : (
+          <Field id="set-current-password" label="Current Password" required error={state.errors.currentPassword}>
+            <input type="password" id="set-current-password" className={cls(state.errors.currentPassword)} autoComplete="current-password"
+              value={v.currentPassword} onChange={(e) => setV({ ...v, currentPassword: e.target.value })} />
+          </Field>
+        )}
         <div className="form-row">
           <Field id="set-new-password" label="New Password" required error={state.errors.newPassword}>
             <input type="password" id="set-new-password" className={cls(state.errors.newPassword)} placeholder="At least 8 characters" autoComplete="new-password"
@@ -149,7 +160,7 @@ function PasswordForm() {
         </div>
       </div>
       <div className="card-footer">
-        <button type="submit" className="btn btn-primary" disabled={state.submitting}>{state.submitting ? 'Saving…' : 'Change Password'}</button>
+        <button type="submit" className="btn btn-primary" disabled={state.submitting}>{state.submitting ? 'Saving…' : settingFirst ? 'Set Password' : 'Change Password'}</button>
       </div>
     </form>
   )

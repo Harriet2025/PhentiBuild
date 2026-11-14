@@ -76,7 +76,7 @@ function Table({ head, children }: { head: ReactNode; children: ReactNode }) {
   return (
     <div className="card">
       <div className="table-responsive">
-        <table className="table"><thead><tr>{head}</tr></thead><tbody>{children}</tbody></table>
+        <table className="table table-stack"><thead><tr>{head}</tr></thead><tbody>{children}</tbody></table>
       </div>
     </div>
   )
@@ -90,10 +90,10 @@ function MeasurementsTab({ project }: { project: Project }) {
         <Table head={<><th>Saved</th><th>Type</th><th>Label</th><th>Values</th></>}>
           {rows.map((m) => (
             <tr key={m.id}>
-              <td className="text-sm">{dateText(m.createdAt)}</td>
-              <td>{capitalize(m.sectionType)}</td>
-              <td>{m.label || <span className="text-muted">—</span>}</td>
-              <td className="text-sm">{Object.entries(m.values).filter(([k]) => k !== 'source').map(([k, v]) => `${k}: ${String(v)}`).join(' · ')}</td>
+              <td data-label="Saved" className="text-sm">{dateText(m.createdAt)}</td>
+              <td data-label="Type">{capitalize(m.sectionType)}</td>
+              <td data-label="Label">{m.label || <span className="text-muted">—</span>}</td>
+              <td data-label="Values" className="text-sm stack-wide">{Object.entries(m.values).filter(([k]) => k !== 'source').map(([k, v]) => `${k}: ${String(v)}`).join(' · ')}</td>
             </tr>
           ))}
         </Table>
@@ -110,10 +110,10 @@ function CalculationsTab({ project }: { project: Project }) {
         <Table head={<><th>Saved</th><th>Calculator</th><th>Label</th><th>Notes</th></>}>
           {rows.map((c) => (
             <tr key={c.id}>
-              <td className="text-sm">{dateText(c.createdAt)}</td>
-              <td>{capitalize(c.calculationType)}</td>
-              <td>{c.label || <span className="text-muted">—</span>}</td>
-              <td className="text-sm">{c.notes || <span className="text-muted">—</span>}</td>
+              <td data-label="Saved" className="text-sm">{dateText(c.createdAt)}</td>
+              <td data-label="Calculator">{capitalize(c.calculationType)}</td>
+              <td data-label="Label">{c.label || <span className="text-muted">—</span>}</td>
+              <td data-label="Notes" className="text-sm">{c.notes || <span className="text-muted">—</span>}</td>
             </tr>
           ))}
         </Table>
@@ -147,16 +147,16 @@ function BoqTab({ project }: { project: Project }) {
           <Table head={<><th>Item</th><th>Category</th><th className="text-right">Adjusted Qty</th><th>Unit</th><th className="text-right">Unit Price</th><th className="text-right">Total</th></>}>
             {rows.map((m) => (
               <tr key={m.id}>
-                <td className="font-medium">{m.item}</td>
-                <td>{m.category}</td>
-                <td className="text-right cell-numeric">{formatQty(m.adjustedQuantity)}</td>
-                <td>{m.unit}</td>
-                <td className="text-right cell-numeric">{formatCurrency(m.unitPrice)}</td>
-                <td className="text-right cell-numeric font-semibold">{formatCurrency(m.total)}</td>
+                <td className="font-medium stack-title">{m.item}</td>
+                <td data-label="Category">{m.category}</td>
+                <td data-label="Adjusted Qty" className="text-right cell-numeric">{formatQty(m.adjustedQuantity)}</td>
+                <td data-label="Unit">{m.unit}</td>
+                <td data-label="Unit Price" className="text-right cell-numeric">{formatCurrency(m.unitPrice)}</td>
+                <td data-label="Total" className="text-right cell-numeric font-semibold">{formatCurrency(m.total)}</td>
               </tr>
             ))}
             <tr className="boq-subtotal-row">
-              <td colSpan={5}>Total — {rows.length} {rows.length === 1 ? 'item' : 'items'} (waste-adjusted, before contingency)</td>
+              <td colSpan={5} className="boq-subtotal-label">Total — {rows.length} {rows.length === 1 ? 'item' : 'items'} (waste-adjusted, before contingency)</td>
               <td className="text-right cell-numeric">{formatCurrency(rows.reduce((s, m) => s + m.total, 0))}</td>
             </tr>
           </Table>
@@ -173,7 +173,7 @@ function ReportsTab({ project }: { project: Project }) {
       {(rows) => (
         <Table head={<><th>Created</th><th>Title</th><th>Type</th></>}>
           {rows.map((r) => (
-            <tr key={r.id}><td className="text-sm">{dateText(r.created_at)}</td><td>{r.title}</td><td>{r.type.toUpperCase()}</td></tr>
+            <tr key={r.id}><td data-label="Created" className="text-sm">{dateText(r.created_at)}</td><td data-label="Title">{r.title}</td><td data-label="Type">{r.type.toUpperCase()}</td></tr>
           ))}
         </Table>
       )}
@@ -189,10 +189,10 @@ function HistoryTab({ project }: { project: Project }) {
         <Table head={<><th>When</th><th>Action</th><th>Summary</th><th>By</th></>}>
           {rows.map((h) => (
             <tr key={h.id}>
-              <td className="text-sm">{relativeTime(parseDate(h.created_at))}</td>
-              <td><span className={`badge ${ACTION_BADGE[h.action] || 'badge-neutral'}`}>{capitalize(h.action)}</span></td>
-              <td>{h.summary}</td>
-              <td className="text-sm">{h.user_name || <span className="text-muted">—</span>}</td>
+              <td data-label="When" className="text-sm">{relativeTime(parseDate(h.created_at))}</td>
+              <td data-label="Action"><span className={`badge ${ACTION_BADGE[h.action] || 'badge-neutral'}`}>{capitalize(h.action)}</span></td>
+              <td data-label="Summary" className="stack-wide">{h.summary}</td>
+              <td data-label="By" className="text-sm">{h.user_name || <span className="text-muted">—</span>}</td>
             </tr>
           ))}
         </Table>

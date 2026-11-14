@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { authApi } from '../../api/resources/auth'
 import { useAuth } from '../../auth/AuthContext'
 import { AuthHero, FieldError, FormSummary } from './AuthHero'
+import { GoogleSignIn } from './GoogleSignIn'
 
 /**
  * Port of frontend/pages/login.php + the login half of js/modules/auth.js.
@@ -107,6 +108,8 @@ export function LoginPage() {
                   {submitting ? 'Logging in…' : 'Log In'}
                 </button>
               </form>
+
+              <GoogleSignIn mode="signin" remember={remember} />
 
               <p className="auth-footer-note">Don’t have an account? <Link to="/register">Create one</Link></p>
             </div>

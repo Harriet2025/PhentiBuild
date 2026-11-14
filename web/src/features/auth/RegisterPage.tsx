@@ -1,6 +1,9 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi, PROFESSIONS } from '../../api/resources/auth'
+import { useAuth } from '../../auth/AuthContext'
+import { BACKEND } from '../../config/env'
+import { GoogleSignIn } from './GoogleSignIn'
 import { AuthHero, FieldError, FormSummary } from './AuthHero'
 
 /**
@@ -40,6 +43,7 @@ function validate(v: Values): Record<string, string> {
 
 export function RegisterPage() {
   const navigate = useNavigate()
+  const { setUser } = useAuth()
   const [values, setValues] = useState<Values>({
     name: '', email: '', phone: '', profession: '', password: '', confirmPassword: '', acceptTerms: false,
   })
@@ -78,7 +82,14 @@ export function RegisterPage() {
       setSummary({ title: result.network ? 'Couldn’t reach the server' : 'Please check the form', text: result.error })
       return
     }
-    navigate('/login?registered=1', { replace: true })
+    // The Django API signs the new account in straight away -> dashboard.
+    // (The classic PHP API doesn't, so it still goes to the login page.)
+    if (BACKEND === 'django') {
+      setUser(result.data)
+      navigate('/dashboard', { replace: true })
+    } else {
+      navigate('/login?registered=1', { replace: true })
+    }
   }
 
   return (
@@ -89,14 +100,9 @@ export function RegisterPage() {
 
           <div className="auth-form-pane">
           <div className="auth-form-float auth-form-float--wide">
-          <div className="auth-form-toolbar">
-            <div className="auth-form-heading">
-              <h1><span className="accent">Create</span> your account</h1>
-              <p>Join PhentiBuild and start building smarter.</p>
-            </div>
-            <div className="auth-switch-pill">
-              Already have an account? <Link to="/login">Log in</Link>
-            </div>
+          <div className="auth-form-heading">
+            <h1><span className="accent">Create</span> your account</h1>
+            <p>Join PhentiBuild and start building smarter.</p>
           </div>
 
           <FormSummary summary={summary} />
@@ -149,16 +155,6 @@ export function RegisterPage() {
               </div>
             </div>
 
-            <div className="auth-security-note">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z" /><path d="M9 12l2 2 4-4" />
-              </svg>
-              <div>
-                <strong>Your security is our priority</strong>
-                <span>Passwords are encrypted end-to-end — we never store or see your plain-text password.</span>
-              </div>
-            </div>
-
             <div className="form-check auth-terms-check">
               <input type="checkbox" id="rf-terms" checked={values.acceptTerms} onChange={(e) => set('acceptTerms')(e.target.checked)} />
               <label htmlFor="rf-terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></label>
@@ -169,6 +165,8 @@ export function RegisterPage() {
               {submitting ? 'Creating account…' : 'Create Account'}
             </button>
           </form>
+
+          <GoogleSignIn mode="signup" />
 
           <p className="auth-footer-note">Already have an account? <Link to="/login">Log in</Link></p>
           </div>

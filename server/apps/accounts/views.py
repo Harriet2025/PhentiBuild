@@ -31,6 +31,7 @@ from apps.core.utils import json_input
 from apps.core.validator import Validator
 from apps.history.service import keys_list, record
 
+from . import google
 from .models import ACCESS_ADMIN, ACCESS_LEVELS, ACCESS_MEMBER, ADMIN, MEMBER_ROLE, PROFESSIONS, User
 from .permissions import IsAdmin
 
@@ -40,6 +41,16 @@ ADMIN_SERVER_ONLY_MESSAGE = ('Admin access cannot be granted through the website
 
 class ScopedThrottleMixin:
     throttle_classes = [ScopedRateThrottle]
+
+
+BACKEND = 'apps.accounts.backends.EmailBcryptBackend'
+
+
+def start_session(request, user: User, remember: bool) -> None:
+    """Log `user` in: new session id (fixation protection) + cookie lifetime."""
+    login(request, user, backend=BACKEND)
+    # "Remember me" = 30-day cookie; otherwise it ends with the browser.
+    request.session.set_expiry(settings.REMEMBER_ME_SECONDS if remember else 0)
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -66,9 +77,7 @@ class LoginView(ScopedThrottleMixin, APIView):
         if user is None:
             raise ApiError('Incorrect email or password.', 401)
 
-        login(request, user)  # rotates the session id (fixation protection)
-        # "Remember me" = 30-day cookie; otherwise it ends with the browser.
-        request.session.set_expiry(settings.REMEMBER_ME_SECONDS if data.get('remember') else 0)
+        start_session(request, user, bool(data.get('remember')))
         return success(user.to_dict())
 
 
@@ -100,7 +109,75 @@ class RegisterView(ScopedThrottleMixin, APIView):
                 )
         except IntegrityError:  # two simultaneous sign-ups with one email
             raise validation_failed({'email': 'An account with this email already exists.'})
+        # Signed in straight away — no need to type the new password again.
+        start_session(request, user, remember=False)
         return created(user.to_dict())
+
+
+class AuthProvidersView(APIView):
+    """GET /api/auth/providers/ — which sign-in options this server offers."""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return success({'google': {'clientId': settings.GOOGLE_CLIENT_ID} if google.is_enabled() else None})
+
+
+class GoogleAuthView(ScopedThrottleMixin, APIView):
+    """
+    POST /api/auth/google/  {"credential": "<Google ID token>", "remember": bool,
+                             "phone": "...", "profession": "..."}
+
+    * Email already has an account  -> signed in   {"status": "signed_in", "user": {...}}
+    * New email, no phone/profession -> 200        {"status": "needs_profile", "name", "email"}
+      (the page asks for them, then sends the same credential again with them)
+    * New email + phone + profession -> account created (Member, no password),
+      signed in, 201 {"status": "signed_in", "user": {...}}
+
+    Google accounts are never Admin; that is still server-only (create_admin).
+    """
+    permission_classes = [AllowAny]
+    throttle_scope = 'login'
+
+    def post(self, request):
+        if not google.is_enabled():
+            raise ApiError('Google sign-in is not set up on this server.', 503)
+        data = json_input(request)
+        credential = data.get('credential')
+        if not isinstance(credential, str) or not credential.strip() or len(credential) > 4096:
+            raise validation_failed({'credential': 'Google sign-in did not return a valid credential.'})
+        try:
+            identity = google.verify_credential(credential.strip())
+        except google.GoogleUnavailable:
+            raise ApiError('Could not reach Google to check your sign-in. Please try again.', 503)
+        except google.InvalidGoogleToken:
+            raise ApiError('Google sign-in could not be verified. Please try again.', 401)
+
+        remember = bool(data.get('remember'))
+        user = User.objects.filter(email__iexact=identity.email).first()
+        if user is not None:
+            start_session(request, user, remember)
+            return success({'status': 'signed_in', 'user': user.to_dict()})
+
+        if 'phone' not in data and 'profession' not in data:
+            return success({'status': 'needs_profile', 'name': identity.name, 'email': identity.email})
+
+        v = Validator(data)
+        v.required('phone', 'Phone').phone('phone', 'Phone')
+        v.required('profession', 'Profession').in_('profession', PROFESSIONS, 'Profession')
+        if v.fails():
+            raise validation_failed(v.errors())
+        clean = v.validated()
+        name = identity.name if len(identity.name) >= 2 else identity.email.split('@')[0][:255]
+        try:
+            with transaction.atomic():
+                user = User.objects.create_user(email=identity.email, password=None, name=name, phone=clean['phone'],
+                                                profession=clean['profession'], role=MEMBER_ROLE)
+        except IntegrityError:  # the same Google account finished sign-up in another tab
+            user = User.objects.get(email__iexact=identity.email)
+            start_session(request, user, remember)
+            return success({'status': 'signed_in', 'user': user.to_dict()})
+        start_session(request, user, remember)
+        return created({'status': 'signed_in', 'user': user.to_dict()})
 
 
 class LogoutView(APIView):
@@ -142,8 +219,11 @@ class ProfileView(APIView):
 class PasswordView(APIView):
     def post(self, request):
         data = json_input(request)
+        user: User = request.user
+        has_password = user.has_usable_password()  # False for Google-only accounts
         v = Validator(data)
-        v.required('currentPassword', 'Current password')
+        if has_password:
+            v.required('currentPassword', 'Current password')
         v.required('newPassword', 'New password').min_length('newPassword', 8, 'New password').max_length('newPassword', 255, 'New password')
         v.required('confirmNewPassword', 'Confirm new password')
         if v.fails():
@@ -151,8 +231,7 @@ class PasswordView(APIView):
         if data['newPassword'] != data['confirmNewPassword']:
             raise validation_failed({'confirmNewPassword': 'New password and confirmation do not match.'})
 
-        user: User = request.user
-        if not user.check_password(str(data['currentPassword'])):
+        if has_password and not user.check_password(str(data['currentPassword'])):
             raise validation_failed({'currentPassword': 'Current password is incorrect.'})
 
         user.set_password(str(data['newPassword']))

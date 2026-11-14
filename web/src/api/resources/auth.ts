@@ -21,7 +21,16 @@ export type CurrentUser = {
   role: AccessLevel | string
   /** Missing on the classic PHP API; null for an Admin who has not picked one yet. */
   profession?: Profession | null
+  /** Django: false for accounts created with Google (no password yet). */
+  hasPassword?: boolean
 }
+
+export type AuthProviders = { google: { clientId: string } | null }
+
+/** POST auth/google/ answers with one of these. */
+export type GoogleAuthResult =
+  | { status: 'signed_in'; user: CurrentUser }
+  | { status: 'needs_profile'; name: string; email: string }
 
 export const isAdmin = (user: CurrentUser | null | undefined) => user?.role === 'Admin'
 
@@ -50,4 +59,11 @@ export const authApi = {
     request<CurrentUser>('POST', endpoints.auth.register, { body: { ...data, role: legacyRole(data.profession) } }),
 
   logout: () => request<null>('POST', endpoints.auth.logout, { body: {} }),
+
+  /** Which sign-in options the server offers (Google is on only when configured). */
+  providers: () => request<AuthProviders>('GET', endpoints.auth.providers),
+
+  /** Send Google's ID token; add phone + profession to finish a brand-new account. */
+  google: (body: { credential: string; remember?: boolean; phone?: string; profession?: string }) =>
+    request<GoogleAuthResult>('POST', endpoints.auth.google, { body }),
 }
