@@ -74,8 +74,14 @@ RESULT_SCHEMA = {
         'heightM': {'anyOf': [{'type': 'number'}, {'type': 'null'}]},
         'confidence': {'type': 'number'},
         'explanation': {'type': 'string'},
+        # Pixel positions of the measuring points (see SYSTEM_PROMPT). With the
+        # printed marker in the photo, the server measures between these points
+        # exactly instead of trusting lengthM / heightM.
+        'points': {'type': 'array', 'items': {
+            'type': 'object', 'properties': {'x': {'type': 'number'}, 'y': {'type': 'number'}},
+            'required': ['x', 'y'], 'additionalProperties': False}},
     },
-    'required': ['objectType', 'referenceFound', 'lengthM', 'heightM', 'confidence', 'explanation'],
+    'required': ['objectType', 'referenceFound', 'lengthM', 'heightM', 'confidence', 'explanation', 'points'],
     'additionalProperties': False,
 }
 
@@ -92,6 +98,11 @@ Measuring:
 - Timber: lengthM is the visible length of the piece; heightM is null. If the whole length is not in the photo, set lengthM to null and say so.
 - Wall: lengthM is the horizontal length and heightM the vertical height of the wall face.
 - Report metres. Account for perspective: the reference is only a reliable scale near its own plane.
+
+points: pixel coordinates in the photo (x to the right, y down, origin top-left), using the image size given in the user message.
+- Timber: exactly 2 points, the two ends of the piece along its length, at the centre of each end.
+- Wall: exactly 4 points, the corners of the measured wall face in this order: top-left, top-right, bottom-right, bottom-left.
+- unknown: an empty list. If an end or corner is outside the photo, give an empty list.
 
 confidence is 0 to 1: how sure you are of the classification and sizes together. Be conservative; use below 0.5 when the reference is small, far away, tilted, or partly hidden.
 explanation: one or two plain sentences for a site worker, saying what you saw and how you measured it."""
@@ -145,14 +156,20 @@ def _client(api_key: str):
     return anthropic.Anthropic(api_key=api_key, timeout=90.0, max_retries=1)
 
 
-def _ask_claude(photo: Photo, reference: str) -> dict:
+def _ask_claude(photo: Photo, reference: str, calibration=None, size: tuple[int, int] | None = None) -> dict:
     import anthropic
 
     ref = REFERENCES[reference]
-    if ref['size']:
+    if calibration is not None and calibration.found:
+        corners = ', '.join(f'({x:.0f}, {y:.0f})' for x, y in calibration.corners)
+        ref_text = (f'Reference object in the photo: {calibration.label} - a printed black-and-white square marker, '
+                    f'{calibration.marker_size_mm:.0f} mm per side, with corners at pixels {corners}.')
+    elif ref['size']:
         ref_text = f"Reference object in the photo: {ref['label']}, real size {ref['size']}."
     else:
         ref_text = 'No reference object was placed in the photo: identify the object only and do not measure.'
+    if size:
+        ref_text += f' The image is {size[0]} x {size[1]} pixels.'
 
     try:
         response = _client(settings.ANTHROPIC_API_KEY).beta.messages.create(
@@ -215,16 +232,48 @@ def _in_range(value: float | None, bounds: tuple[float, float]) -> float | None:
     return value if value is not None and bounds[0] <= value <= bounds[1] else None
 
 
-def interpret(raw: dict, reference: str) -> dict:
+def _points(raw: dict, object_type: str | None, size: tuple[int, int] | None) -> list[list[float]]:
+    """Claude's measuring points, only if there are the right number and all lie inside the photo."""
+    pts = raw.get('points')
+    need = 2 if (object_type or '').startswith('timber_') else 4 if object_type == 'exposed_wall' else 0
+    if not need or not isinstance(pts, list) or len(pts) != need or not size:
+        return []
+    out = []
+    for pt in pts:
+        x = _number(pt.get('x')) if isinstance(pt, dict) else None
+        y = _number(pt.get('y')) if isinstance(pt, dict) else None
+        if x is None or y is None or not (0 <= x <= size[0] and 0 <= y <= size[1]):
+            return []
+        out.append([round(x, 1), round(y, 1)])
+    return out
+
+
+def _marker_sizes(object_type: str, pts: list, homography: list) -> tuple[float | None, float | None]:
+    """Exact lengths (metres) between the measuring points, on the marker's plane."""
+    from .markers import distance_m
+
+    if object_type.startswith('timber_'):
+        return distance_m(homography, pts[0], pts[1]), None
+    tl, tr, br, bl = pts
+    length = (distance_m(homography, tl, tr) + distance_m(homography, bl, br)) / 2
+    height = (distance_m(homography, tl, bl) + distance_m(homography, tr, br)) / 2
+    return length, height
+
+
+def interpret(raw: dict, reference: str, calibration=None, size: tuple[int, int] | None = None) -> dict:
     """Turn Claude's answer into the scanner's result - with every check applied."""
     object_type = raw.get('objectType') if raw.get('objectType') in LABELS else None
-    reference_found = raw.get('referenceFound') is True and reference != 'none'
+    marker = calibration if calibration is not None and calibration.found else None
+    reference_found = marker is not None or (raw.get('referenceFound') is True and reference != 'none')
+    points = _points(raw, object_type, size)
+    measured_by = None
     confidence = _number(raw.get('confidence'))
     confidence = round(min(1.0, max(0.0, confidence)), 2) if confidence is not None else None
     explanation = str(raw.get('explanation') or '').strip()[:400]
 
     base = {'objectType': object_type, 'label': LABELS.get(object_type), 'measurements': {}, 'confidence': confidence,
-            'referenceFound': reference_found, 'explanation': explanation}
+            'referenceFound': reference_found, 'explanation': explanation, 'points': points,
+            'calibration': marker.to_dict() if marker else None, 'measuredBy': None}
 
     if object_type is None:
         return {**base, 'status': 'not_recognised', 'confidence': None,
@@ -239,6 +288,12 @@ def interpret(raw: dict, reference: str) -> dict:
 
     length = _number(raw.get('lengthM'))
     height = _number(raw.get('heightM'))
+    if marker is not None and points:
+        # Exact: measured between the points on the marker's plane, not guessed.
+        length, height = _marker_sizes(object_type, points, marker.homography)
+        measured_by = 'marker'
+    elif length is not None or height is not None:
+        measured_by = 'estimate'
     dropped = False
     if object_type.startswith('timber_'):
         checked = _in_range(length, TIMBER_LENGTH_RANGE)
@@ -263,17 +318,27 @@ def interpret(raw: dict, reference: str) -> dict:
         notes.append('The sizes could not be measured reliably; enter them manually.')
     if confidence is not None and confidence < LOW_CONFIDENCE:
         notes.append('Low confidence: check every value carefully.')
+    if measured_by == 'marker':
+        notes.insert(0, 'Measured with the PhentiBuild marker between the points shown on the photo; drag them if they are off.')
+        if marker.quality == 'poor':
+            notes.append(marker.message)
     message = ' '.join([explanation or 'Object identified from the photo.'] + notes + ['Check the values, correct them if needed, then confirm.'])
-    return {**base, 'status': 'detected', 'measurements': measurements, 'message': message}
+    return {**base, 'status': 'detected', 'measurements': measurements, 'message': message,
+            'measuredBy': measured_by if measurements else None}
 
 
 def analyse(photo: Photo, reference: str) -> dict:
-    return interpret(_ask_claude(photo, reference), reference)
+    from . import markers
+
+    gray = markers.decode(base64.b64decode(photo.data_base64))
+    size = (int(gray.shape[1]), int(gray.shape[0])) if gray is not None else None
+    calibration = markers.calibrate_image(gray) if gray is not None else None
+    return interpret(_ask_claude(photo, reference, calibration, size), reference, calibration, size)
 
 
 NOT_CONFIGURED = {
     'status': 'not_configured', 'objectType': None, 'label': None, 'measurements': {}, 'confidence': None,
-    'referenceFound': False, 'explanation': '',
+    'referenceFound': False, 'explanation': '', 'points': [], 'calibration': None, 'measuredBy': None,
     'message': 'Automatic measuring is not switched on for this server, so nothing was detected. Enter the object type '
                'and measurements manually below.',
 }

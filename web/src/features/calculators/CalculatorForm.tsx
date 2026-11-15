@@ -34,7 +34,12 @@ const resolve = <T,>(specOrFn: T | ((r: EngineResult) => T), result: EngineResul
 const sentence = (label: string) => label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()
 const entriesMessage = (n: number) => (n === 1 ? 'There is 1 entry that needs your attention.' : `There are ${n} entries that need your attention.`)
 
-export function CalculatorForm({ section, mode }: { section: FormSection; mode: 'calculator' | 'manual' }) {
+export function CalculatorForm({ section, mode, initialValues }: {
+  section: FormSection
+  mode: 'calculator' | 'manual'
+  /** Pre-filled values (e.g. sizes measured by the Camera Scanner), in each field's default unit. */
+  initialValues?: Record<string, string>
+}) {
   const toast = useToast()
   const projectId = useActiveProjectId() // chosen in the page header's "Save to project"
   const def = section.calc
@@ -43,7 +48,7 @@ export function CalculatorForm({ section, mode }: { section: FormSection; mode: 
     () => Object.fromEntries(section.fields.filter((f) => f.kind === 'length' || f.kind === 'pitch').map((f) => [f.name, (f as { unit: string }).unit])),
     [section],
   )
-  const [values, setValues] = useState<Record<string, string>>({})
+  const [values, setValues] = useState<Record<string, string>>(initialValues ?? {})
   const [units, setUnits] = useState<Record<string, string>>(initialUnits)
   const [unitAll, setUnitAll] = useState('')
   const [touched, setTouched] = useState<Record<string, boolean>>({})

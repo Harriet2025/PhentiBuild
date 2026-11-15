@@ -157,6 +157,8 @@ REST_FRAMEWORK = {
         'contact': env('CONTACT_THROTTLE_RATE', '10/hour'),
         # Each scanner analysis is a paid AI call - cap it per user.
         'vision': env('VISION_THROTTLE_RATE', '30/hour'),
+        # Marker measuring is free (runs on our server) - a generous cap.
+        'scanner': env('SCANNER_THROTTLE_RATE', '240/hour'),
     },
     'UNAUTHENTICATED_USER': 'django.contrib.auth.models.AnonymousUser',
 }

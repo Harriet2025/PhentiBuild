@@ -67,6 +67,7 @@ urlpatterns = [
     path('api/roof-designs/', roofing.RoofDesignView.as_view()),
     path('api/roof-ai/generate/', roofing.RoofAIGenerateView.as_view()),
     path('api/scanner/detect/', vision.DetectView.as_view()),
+    path('api/scanner/calibrate/', vision.CalibrateView.as_view()),
 
     path('api/history/', history.HistoryListView.as_view()),
     path('api/history/<int:pk>/', history.HistoryDetailView.as_view()),

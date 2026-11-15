@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { ActiveProjectPicker } from '../../components/ProjectPicker'
 import { CalculatorForm } from './CalculatorForm'
 import { CALCULATORS } from './config'
@@ -6,7 +6,11 @@ import { CALCULATORS } from './config'
 /** Port of the calculators module: #/calculators (chooser) and #/calculators/<type> (a form). */
 export function CalculatorsPage() {
   const { type } = useParams()
+  const [params] = useSearchParams()
   const def = type ? CALCULATORS.find((c) => c.id === type) : undefined
+  // Sizes handed over from the Camera Scanner (?wallLength=4.5&from=scanner) - only real field names are used.
+  const prefill = def ? Object.fromEntries(def.fields.filter((f) => params.get(f.name)).map((f) => [f.name, params.get(f.name) as string])) : {}
+  const fromScanner = params.get('from') === 'scanner' && Object.keys(prefill).length > 0
 
   if (type && !def) return <Navigate to="/calculators" replace />
 
@@ -59,8 +63,18 @@ export function CalculatorsPage() {
             <Link to="/calculators" className="btn btn-outline-secondary btn-sm">Change calculator</Link>
           </div>
         </div>
-        {/* key resets the form when switching calculators */}
-        <CalculatorForm key={def.id} section={{ id: def.id, label: def.label, desc: def.desc, fields: def.fields, calc: def }} mode="calculator" />
+        {fromScanner && (
+          <div className="alert alert-info">
+            <span className="alert-icon">i</span>
+            <div className="alert-body">
+              <span className="alert-title">Sizes from the Camera Scanner</span>
+              <span>{def.fields.filter((f) => prefill[f.name]).map((f) => f.label).join(', ')} {Object.keys(prefill).length === 1 ? 'has' : 'have'} been filled in from your scan. Complete the remaining fields, then calculate.</span>
+            </div>
+          </div>
+        )}
+        {/* key resets the form when switching calculators or arriving with new scanner sizes */}
+        <CalculatorForm key={`${def.id}?${params.toString()}`} section={{ id: def.id, label: def.label, desc: def.desc, fields: def.fields, calc: def }}
+          mode="calculator" initialValues={prefill} />
       </div>
     </div>
   )

@@ -28,6 +28,22 @@ export const FALLBACK_REFERENCES: ReferenceOption[] = [
 
 export type DetectionStatus = 'detected' | 'no_reference' | 'not_recognised' | 'not_configured'
 
+/** Result of finding the printed PhentiBuild marker (OpenCV on the server; free, no AI). */
+export type Calibration = {
+  found: boolean
+  message: string
+  markerId: number | null
+  reference: 'card' | 'a4' | null
+  label: string | null
+  markerSizeMm: number | null
+  /** Marker corners in photo pixels: top-left, top-right, bottom-right, bottom-left. */
+  corners: [number, number][] | null
+  homography: number[][] | null
+  imageWidth: number | null
+  imageHeight: number | null
+  quality: 'good' | 'fair' | 'poor' | null
+}
+
 export type Detection = {
   status: DetectionStatus
   objectType: string | null
@@ -39,6 +55,10 @@ export type Detection = {
   explanation: string
   message: string
   plannedObjectTypes: PlannedObjectType[]
+  /** Measuring points Claude placed (photo pixels), when it could. */
+  points: [number, number][]
+  /** 'marker' = exact, from the printed marker; 'estimate' = Claude's own estimate. */
+  measuredBy: 'marker' | 'estimate' | null
 }
 
 type Meta = { plannedObjectTypes?: PlannedObjectType[]; references?: ReferenceOption[] }
@@ -54,6 +74,14 @@ export const visionApi = {
       types: meta.plannedObjectTypes || FALLBACK_OBJECT_TYPES,
       references: meta.references || FALLBACK_REFERENCES,
     }
+  },
+
+  /** Find the printed marker in the photo (free, works without any AI key). */
+  async calibrate(dataUrl: string): Promise<{ ok: true; calibration: Calibration } | { ok: false; error: string }> {
+    const match = /^data:([^;]+);base64,(.*)$/.exec(dataUrl)
+    if (!match) return { ok: false, error: 'The captured image could not be read.' }
+    const r = await request<Calibration>('POST', endpoints.scannerCalibrate, { body: { image: match[2], mimeType: match[1] } })
+    return r.ok ? { ok: true, calibration: r.data } : { ok: false, error: r.error }
   },
 
   async detect(dataUrl: string, reference: ReferenceId): Promise<{ ok: true; detection: Detection } | { ok: false; error: string }> {
@@ -74,6 +102,8 @@ export const visionApi = {
         explanation: d.explanation || '',
         message: d.message || '',
         plannedObjectTypes: (r.meta as Meta).plannedObjectTypes || FALLBACK_OBJECT_TYPES,
+        points: Array.isArray(d.points) ? d.points : [],
+        measuredBy: d.measuredBy ?? null,
       },
     }
   },

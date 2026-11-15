@@ -11,3 +11,6 @@ google-auth==2.40.3
 requests==2.32.4
 # Camera Scanner measuring: Anthropic's official SDK (Claude vision).
 anthropic==2.8.0
+# Camera Scanner: exact scale from the printed ArUco marker (open source, no AI).
+opencv-python-headless==4.12.0.88
+numpy==2.2.6

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { Logo } from '../../components/Logo'
 
@@ -29,10 +30,10 @@ export function AuthHero({
     <aside className="auth-hero-pane">
       <div className="auth-hero-overlay" />
       <div className="auth-hero-content">
-        <div className="auth-hero-brand">
+        <Link to="/" className="auth-hero-brand" aria-label="PhentiBuild home" style={{ color: 'inherit', textDecoration: 'none' }}>
           <Logo className="auth-hero-logo" size={40} />
           <span>PhentiBuild</span>
-        </div>
+        </Link>
 
         <p className="auth-hero-eyebrow">{eyebrow}</p>
         <h1 className="auth-hero-title">{title}</h1>

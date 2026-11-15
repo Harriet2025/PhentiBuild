@@ -18,7 +18,7 @@ from apps.core.responses import ApiError, success, validation_failed
 from apps.core.utils import json_input
 from apps.core.validator import Validator
 
-from . import service
+from . import markers, service
 
 MAX_IMAGE_CHARS = 8 * 1024 * 1024
 PLANNED_OBJECT_TYPES = service.OBJECT_TYPES  # name kept for the API's meta key
@@ -36,6 +36,40 @@ class VisionThrottle(ScopedRateThrottle):
         if request.method != 'POST' or not service.is_configured():
             return True
         return super().allow_request(request, view)
+
+
+def _photo_from(data: dict) -> service.Photo:
+    """Shared input checks for both scanner endpoints."""
+    image = data.get('image')
+    if not isinstance(image, str) or not image:
+        raise validation_failed({'image': 'Image is required.' if not image else 'The captured image could not be read.'})
+    if len(image) > MAX_IMAGE_CHARS:
+        raise ApiError('Captured image is too large.', 413)
+    try:
+        return service.validate_photo(image, str(data.get('mimeType') or 'image/jpeg'))
+    except service.InvalidImage as exc:
+        if str(exc) == 'too_large':
+            raise ApiError('Captured image is too large.', 413)
+        raise validation_failed({'image': str(exc)})
+
+
+class CalibrateView(APIView):
+    """
+    POST /api/scanner/calibrate/ {"image": <base64>, "mimeType": ...}
+
+    Finds the printed PhentiBuild marker (OpenCV, free, no AI) and returns
+    the exact pixel -> millimetre mapping, so the person can tap points on
+    the photo and get real distances.
+    """
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'scanner'
+
+    def post(self, request):
+        photo = _photo_from(json_input(request))
+        gray = markers.decode(service.base64.b64decode(photo.data_base64))
+        if gray is None:
+            raise validation_failed({'image': 'The captured image could not be read.'})
+        return success(markers.calibrate_image(gray).to_dict())
 
 
 class DetectView(APIView):

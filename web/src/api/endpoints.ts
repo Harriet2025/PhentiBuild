@@ -51,6 +51,8 @@ export const endpoints = {
   roofDesigns: single('roof-designs/index.php', 'roof-designs/'),
   roofAi: single('roof-ai/generate.php', 'roof-ai/generate/'),
   scannerDetect: single('scanner/detect.php', 'scanner/detect/'),
+  // Django only: finds the printed marker for exact photo measuring.
+  scannerCalibrate: single('scanner/calibrate.php', 'scanner/calibrate/'),
   exportExcel: single('export/excel.php', 'export/excel/'),
   contact: single('contact/submit.php', 'contact/'),
 } as const
